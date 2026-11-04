@@ -453,7 +453,7 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
       <button aria-pressed="false" data-f="spiel">Games</button>
       <button aria-pressed="false" data-f="web">Web</button>
       <button aria-pressed="false" data-f="app">Apps</button>
-      <button aria-pressed="false" data-f="mod">Mods</button>
+      <button aria-pressed="false" data-f="tool">Tools</button>
     </div>
     <ol class="werke">
       <li data-k="spiel">
@@ -521,14 +521,16 @@ export ANDROID_HOME=/path/to/android-sdk
           </div>
         </details>
       </li>
-      <li data-k="mod">
+      <li data-k="tool">
         <details>
-          <summary><span class="n">VI</span><div><b>Satis-FPV</b><p>FPV mod for Satisfactory, early stage</p></div><span class="lang">—</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <summary><span class="n">VI</span><div><b>Dither Workshop</b><p>1-bit dither and ASCII art editor in the browser: convert images, paint by hand, export PNG, SVG or text</p></div><span class="lang">JavaScript</span><span class="more" aria-hidden="true">Commands</span></summary>
           <div class="inst">
-            <div class="kicker">Installation</div>
-            <pre><code>git clone https://github.com/hjorven/Satis-FPV.git</code><button class="copy" type="button">COPY</button></pre>
-            <p>No runnable code in the repository yet, just the project idea so far.</p>
-            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/Satis-FPV">Repository</a></div>
+            <div class="kicker">Run locally</div>
+            <pre><code>git clone https://github.com/hjorven/dither-werkstatt.git
+cd dither-werkstatt
+python3 -m http.server 8000</code><button class="copy" type="button">COPY</button></pre>
+            <p>Then open http://localhost:8000. Or use it directly in the browser, nothing to install.</p>
+            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/dither-werkstatt">Repository</a><a class="btn" href="https://hjorven.github.io/dither-werkstatt/">Open</a></div>
           </div>
         </details>
       </li>
@@ -562,9 +564,9 @@ export ANDROID_HOME=/path/to/android-sdk
         <div class="pic"><div class="art" role="img" aria-label="Engraving: an aqueduct" style="--m:url(img/arch.png)"></div></div>
       </div>
       <div class="princ">
-        <div class="kicker">IV &middot; Mods</div>
-        <h3>Extending games</h3>
-        <p>An FPV mod for Satisfactory is on the workbench.</p>
+        <div class="kicker">IV &middot; Tools</div>
+        <h3>Workshop for the look</h3>
+        <p>A browser editor that turns images into 1-bit dither and ASCII art, the same style as this page.</p>
         <div class="pic"><canvas data-noise="0.5"></canvas><span class="num">IV</span></div>
       </div>
     </div>
