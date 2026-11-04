@@ -5,6 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hjorven Portfolio</title>
 <meta name="description" content="Portfolio of hjorven: browser games, websites and apps, with install commands for every project.">
+<link rel="canonical" href="https://hjorven.github.io/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#10112c">
+<meta name="apple-mobile-web-app-title" content="Hjorven">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hjorven">
+<meta property="og:title" content="Hjorven · Games, apps and clocks">
+<meta property="og:description" content="Browser games, websites and apps by hjorven, with install commands for every project.">
+<meta property="og:url" content="https://hjorven.github.io/">
+<meta property="og:image" content="https://hjorven.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Engraving of an icosahedron on a column with the words Games, apps and clocks">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hjorven · Games, apps and clocks">
+<meta name="twitter:description" content="Browser games, websites and apps by hjorven, with install commands for every project.">
+<meta name="twitter:image" content="https://hjorven.github.io/og.png">
 <script>
   (function () {
     var t = null, a = null;
@@ -677,10 +698,11 @@ export ANDROID_HOME=/path/to/android-sdk
     modeBtn.setAttribute('aria-pressed', root.dataset.theme === 'light');
     swatches.forEach(b => { b.setAttribute('aria-checked', b.dataset.a === root.dataset.accent); b.tabIndex = b.dataset.a === root.dataset.accent ? 0 : -1; });
   }
+  function syncThemeColor() { const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = getComputedStyle(root).getPropertyValue('--ink').trim() ? 'rgb(' + cssColor('--ink').join(',') + ')' : '#10112c'; }
   function save() { try { localStorage.setItem('theme', root.dataset.theme); localStorage.setItem('accent', root.dataset.accent); } catch (e) {} }
 
   function wave(fromEl, apply) {
-    const done = () => { apply(); paint(); syncUI(); save(); };
+    const done = () => { apply(); paint(); syncUI(); syncThemeColor(); save(); };
     if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) { done(); return; }
     const r = fromEl.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
     const R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) * 1.15;
@@ -717,7 +739,7 @@ export ANDROID_HOME=/path/to/android-sdk
   document.getElementById('swatches').addEventListener('wheel', e => {
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { e.currentTarget.scrollLeft += e.deltaY; e.preventDefault(); }
   }, { passive: false });
-  syncUI();
+  syncUI(); syncThemeColor();
   swatches.find(b => b.dataset.a === root.dataset.accent)?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 
   /* ---------- Animationen ---------- */
