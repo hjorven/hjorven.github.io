@@ -9,6 +9,7 @@ Live: https://hjorven.github.io/
 - Six featured projects with install commands for each one
 - Live binary clock
 - Light and dark theme plus 12 accent colours; every switch spreads across the page as a wave (View Transitions API)
+- Animations: engravings develop dot by dot as they scroll into view, the hero icosahedron turns (24 pre-rendered frames) with scroll parallax, a dither lens follows mouse or finger, and taps send out a dithered ripple. All of it is off when the system asks for reduced motion.
 - No build step, no frameworks, no trackers. Fonts are self-hosted.
 
 ## Run locally
@@ -27,7 +28,8 @@ The images in `img/` are 1-bit alpha masks rendered with `tools/render.py` (raym
 
 ```bash
 pip install numpy pillow
-python3 tools/render.py out hero hex rack torus armillary dice temple arch
+python3 tools/render.py out hex rack torus armillary dice temple arch
+python3 tools/hero_layers.py out 24   # hero layers: rays, column and the 24-frame icosahedron sprite
 ```
 
 ## Fonts

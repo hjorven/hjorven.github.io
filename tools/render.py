@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 import sys, os
 
-OUT = sys.argv[1]
+OUT = sys.argv[1] if len(sys.argv) > 1 else "out"
 os.makedirs(OUT, exist_ok=True)
 
 def norm(v):
@@ -205,13 +205,18 @@ def scene_head(p):
     return np.minimum(d, leaf)
 
 # ---------- Renderer ----------
-def render(scene, W, H, cam=(0, 0, 5.5), target=(0, 0, 0), fov=1.0, light=(-0.6, 0.8, 0.6), steps=90):
+def render(scene, W, H, cam=(0, 0, 5.5), target=(0, 0, 0), fov=1.0, light=(-0.6, 0.8, 0.6), steps=90, crop=None):
     cam = np.array(cam, float); target = np.array(target, float)
     f = norm(target - cam); r = norm(np.cross(f, [0, 1, 0])); u = np.cross(r, f)
-    ys, xs = np.mgrid[0:H, 0:W]
+    if crop:
+        x0, y0, cw, ch = crop
+        ys, xs = np.mgrid[y0:y0 + ch, x0:x0 + cw]
+    else:
+        ys, xs = np.mgrid[0:H, 0:W]
+    SH = xs.shape
     uvx = (xs - W / 2) / H * fov; uvy = -(ys - H / 2) / H * fov
     rd = norm(f[None, None] + uvx[..., None] * r + uvy[..., None] * u)
-    t = np.zeros((H, W)); hit = np.zeros((H, W), bool)
+    t = np.zeros(SH); hit = np.zeros(SH, bool)
     for _ in range(steps):
         pos = cam + rd * t[..., None]
         d = scene(pos)
@@ -227,14 +232,14 @@ def render(scene, W, H, cam=(0, 0, 5.5), target=(0, 0, 0), fov=1.0, light=(-0.6,
     L = norm(np.array(light, float))
     diff = np.clip(n @ L, 0, 1)
     # weiche Schatten
-    sh = np.ones((H, W)); ts = np.full((H, W), 0.02)
+    sh = np.ones(SH); ts = np.full(SH, 0.02)
     for _ in range(40):
         d = scene(pos + n * 0.004 + L * ts[..., None])
         sh = np.minimum(sh, 8 * d / ts)
         ts += np.clip(d, 0.02, 0.25)
     sh = np.clip(sh, 0, 1)
     # Umgebungsverdeckung
-    ao = np.zeros((H, W))
+    ao = np.zeros(SH)
     for i in range(1, 6):
         h = 0.06 * i
         ao += (h - scene(pos + n * h)) / (2 ** i)
@@ -268,10 +273,10 @@ def floyd(v):
                 if x + 1 < W: v[y + 1, x + 1] += err * 1 / 16
     return out
 
-def engrave(v, period=5.0):
+def engrave(v, period=5.0, off=(0, 0)):
     """Kupferstich-Linienraster: Linien werden in hellen Bereichen dicker."""
     H, W = v.shape
-    ys, xs = np.mgrid[0:H, 0:W]
+    ys, xs = np.mgrid[off[1]:off[1] + H, off[0]:off[0] + W]
     phase = (ys + 6 * np.sin(xs / 37.0) + 3 * np.sin(xs / 11.0 + ys / 23.0)) / period
     dist = np.abs(phase - np.round(phase))          # 0 in Linienmitte, 0.5 dazwischen
     return dist < v * 0.5
