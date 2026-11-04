@@ -6,10 +6,12 @@ Live: https://hjorven.github.io/
 
 ## Features
 
-- Six featured projects with install commands for each one
+- Six projects (four featured) with install commands for each one
 - Live binary clock
 - Light and dark theme plus 12 accent colours; every switch spreads across the page as a wave (View Transitions API)
-- Animations: engravings develop dot by dot as they scroll into view, the hero icosahedron turns (24 pre-rendered frames) with scroll parallax, a dither lens follows mouse or finger, and taps send out a dithered ripple. All of it is off when the system asks for reduced motion.
+- Animations: engravings develop dot by dot as they scroll into view, the hero icosahedron turns (24 pre-rendered frames) with scroll parallax, and taps send out a dithered ripple. All of it is off when the system asks for reduced motion.
+- Wallpapers: 24 iPad Safari start-page backgrounds in all 12 colours at [/wallpapers/](https://hjorven.github.io/wallpapers/), kept in their own repository (see below)
+- Favicon, home-screen icons, web manifest and a link preview image (`og.png`)
 - No build step, no frameworks, no trackers. Fonts are self-hosted.
 
 ## Wallpapers
@@ -32,8 +34,9 @@ The images in `img/` are 1-bit alpha masks rendered with `tools/render.py` (raym
 
 ```bash
 pip install numpy pillow
-python3 tools/render.py out hex rack torus armillary dice temple arch
+python3 tools/render.py out hex rack torus armillary dice temple arch easel
 python3 tools/hero_layers.py out 24   # hero layers: rays, column and the 24-frame icosahedron sprite
+python3 tools/hero_knock.py           # backing for the icosahedron sprite, from img/hero-ico.png
 ```
 
 ## Fonts
