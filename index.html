@@ -163,11 +163,8 @@
 
   /* Navigation */
   nav { border-bottom: 1px solid var(--line); }
-  nav .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 72px; }
-  nav .links { display: flex; gap: 28px; }
-  nav .links a { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; text-decoration: none; color: var(--muted); }
-  nav .links a:hover { color: var(--paper); }
-  .logo { font-family: var(--serif); font-size: 24px; line-height: .85; text-align: center; text-decoration: none; letter-spacing: .02em; }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; height: 64px; }
+  .logo { font-family: var(--serif); font-size: 24px; line-height: .85; text-align: left; text-decoration: none; letter-spacing: .02em; }
   .logo small { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .3em; color: var(--muted); margin-top: 4px; }
   nav .right { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
 
@@ -290,8 +287,6 @@
   .inst-links { display: flex; gap: 6px; }
 
   @media (max-width: 860px) {
-    nav .wrap { grid-template-columns: 1fr auto; }
-    nav .links { display: none; }
     .logo { text-align: left; }
     .hero { grid-template-columns: 1fr; padding-top: 36px; }
     .hero figure { order: -1; width: 100%; max-width: 420px; margin-inline: auto; }
@@ -322,15 +317,8 @@
 
 <nav>
   <div class="wrap">
-    <div class="links">
-      <a href="#opera">Featured</a>
-      <a href="#index">Index</a>
-    </div>
     <a class="logo" href="#">HJORVEN<small>OFFICINA</small></a>
-    <div class="right">
-      <div class="links" style="margin-right:18px"><a href="#disciplinae">Craft</a><a href="#quaestiones">FAQ</a></div>
-      <a class="btn" href="https://github.com/hjorven">GitHub</a>
-    </div>
+    <div class="right"><a class="btn ghost" href="https://github.com/hjorven">GitHub</a></div>
   </div>
 </nav>
 
