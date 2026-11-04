@@ -99,19 +99,10 @@
     -webkit-mask: var(--m) 0 0 / 100% 100% no-repeat; mask: var(--m) 0 0 / 100% 100% no-repeat; }
   .layer.ico::after { -webkit-mask-size: 2400% 100%; mask-size: 2400% 100%;
     -webkit-mask-position: calc(var(--f, 0) * 100% / 23) 0; mask-position: calc(var(--f, 0) * 100% / 23) 0; }
-
-  /* Dither-Lupe: unter Maus oder Finger kippen die Rasterpunkte in eine Kontrastfarbe */
-  @property --lr { syntax: "<length>"; inherits: true; initial-value: 0px; }
-  .art, .layer { --lr: 0px; transition: --lr .25s ease-out; }
-  .art.lens, .layer.lens { --lr: 64px; }
-  .art::before, .layer::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: var(--lens-c, var(--paper));
-    -webkit-mask: var(--m) center / 240px 240px no-repeat, radial-gradient(circle var(--lr) at var(--mx, -999px) var(--my, -999px), #000 97%, transparent 100%);
-    mask: var(--m) center / 240px 240px no-repeat, radial-gradient(circle var(--lr) at var(--mx, -999px) var(--my, -999px), #000 97%, transparent 100%);
-    -webkit-mask-composite: source-in; mask-composite: intersect; }
-  .layer::before { --lens-c: var(--accent); -webkit-mask-position: 0 0, 0 0; mask-position: 0 0, 0 0; -webkit-mask-size: 100% 100%, auto; mask-size: 100% 100%, auto; }
-  .layer.ico::before { -webkit-mask-size: 2400% 100%, auto; mask-size: 2400% 100%, auto;
-    -webkit-mask-position: calc(var(--f, 0) * 100% / 23) 0, 0 0; mask-position: calc(var(--f, 0) * 100% / 23) 0, 0 0; }
-  @media (max-width: 560px) { .opus .art::before { -webkit-mask-size: 480px 480px, auto; mask-size: 480px 480px, auto; } }
+  /* Unterlage in Hintergrundfarbe: verdeckt die Strahlen genau hinter dem aktuellen Bild */
+  .layer.ico::before { content: ""; position: absolute; inset: 0; background: var(--ink);
+    -webkit-mask: url(img/hero-ico-knock.png) 0 0 / 2400% 100% no-repeat; mask: url(img/hero-ico-knock.png) 0 0 / 2400% 100% no-repeat;
+    -webkit-mask-position: calc(var(--f, 0) * 100% / 23) 0; mask-position: calc(var(--f, 0) * 100% / 23) 0; }
 
   /* Entwickeln beim Reinscrollen: ein Schleier aus Rasterpunkten löst sich auf */
   .veil { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; image-rendering: pixelated; pointer-events: none; }
@@ -303,7 +294,7 @@
     nav .links { display: none; }
     .logo { text-align: left; }
     .hero { grid-template-columns: 1fr; padding-top: 36px; }
-    .hero figure { order: -1; max-width: 420px; margin-inline: auto; }
+    .hero figure { order: -1; width: 100%; max-width: 420px; margin-inline: auto; }
     .opera { grid-template-columns: 1fr; }
     .werke summary { grid-template-columns: 40px 1fr auto; }
     .werke .lang { display: none; }
@@ -813,27 +804,6 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
     requestAnimationFrame(heroTick);
   }
   if (!calm) requestAnimationFrame(heroTick);
-
-  /* 5) Dither-Lupe */
-  const lensTargets = [...document.querySelectorAll('.art, .layer')];
-  let lensOn = null;
-  function lensMove(e) {
-    const x = e.clientX, y = e.clientY;
-    lensTargets.forEach(el => {
-      const r = el.getBoundingClientRect();
-      const near = x > r.left - 70 && x < r.right + 70 && y > r.top - 70 && y < r.bottom + 70;
-      if (near) {
-        el.style.setProperty('--mx', (x - r.left) + 'px'); el.style.setProperty('--my', (y - r.top) + 'px');
-        el.classList.add('lens');
-      } else el.classList.remove('lens');
-    });
-  }
-  function lensOff() { lensTargets.forEach(el => el.classList.remove('lens')); }
-  addEventListener('pointermove', lensMove, { passive: true });
-  addEventListener('pointerdown', lensMove, { passive: true });
-  addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') setTimeout(lensOff, 500); }, { passive: true });
-  document.addEventListener('pointerleave', lensOff);
-  addEventListener('scroll', () => { if (matchMedia('(hover: none)').matches) lensOff(); }, { passive: true });
 
   /* 6) Tipp-Welle: Ring aus Rasterpunkten vom Tippunkt aus */
   const rc = document.getElementById('ripples'), rctx = rc.getContext('2d');
