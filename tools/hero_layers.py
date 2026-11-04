@@ -58,21 +58,18 @@ y0, y1 = max(0, ys.min() * 4 - 16), min(HC, ys.max() * 4 + 20)
 cw, ch = x1 - x0, y1 - y0
 print("Fenster", x0, y0, cw, ch, flush=True)
 
-frames, objs, union = [], [], np.zeros((H, W), bool)
+frames, union = [], np.zeros((H, W), bool)
 for k in range(N):
     ang = np.pi * k / N   # halbe Umdrehung: die y-Achse ist eine 2-zählige Symmetrieachse -> nahtlose Schleife
     v = R.render(scene_ico(ang), W, H, crop=(x0, y0, cw, ch), **CAM)
     m, obj = engrave_layer(v, off=(x0, y0))
     frames.append(m)
-    objs.append(obj)
     union[y0:y0 + ch, x0:x0 + cw] |= obj
     print("Bild", k + 1, "von", N, flush=True)
 sprite = np.concatenate(frames, axis=1)
 save_mask(sprite, f"{OUTDIR}/hero-ico.png")
 
-# Unterlage pro Bild: gefüllte Silhouette, damit das Ikosaeder die Strahlen verdeckt
-knock = [R.binary_dilation(obj_k, iterations=5) for obj_k in objs]
-save_mask(np.concatenate(knock, axis=1), f"{OUTDIR}/hero-ico-knock.png")
+# Unterlage fürs Ikosaeder danach mit tools/hero_knock.py erzeugen (liest img/hero-ico.png)
 
 # Strahlen, nur um die Säule ausgespart (das Ikosaeder deckt sie mit seiner Unterlage selbst ab)
 r = R.rays(W, H, W * 0.5, H * 0.3, n=110)

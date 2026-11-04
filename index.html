@@ -231,8 +231,6 @@
   .princ p { color: var(--muted); margin: 0 0 18px; max-width: 34ch; }
   .princ .pic { aspect-ratio: 4 / 3; overflow: hidden; position: relative; background: var(--ink-2); }
   .princ .pic .art { width: 100%; height: 100%; }
-  .princ .pic canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
-  .princ .pic .num { position: absolute; left: 14px; bottom: 6px; font-family: var(--serif); font-size: 64px; color: var(--ink); line-height: 1; }
 
   /* Quaestiones (FAQ) */
   .faq details { border-top: 1px solid var(--line); }
@@ -338,7 +336,7 @@
 
       <div class="stats">
         <div><b>VI</b><span>Projects</span></div>
-        <div><b>III</b><span>Live in the browser</span></div>
+        <div><b>IV</b><span>Live in the browser</span></div>
         <div><b>IV</b><span>Languages</span></div>
       </div>
 
@@ -511,7 +509,7 @@ export ANDROID_HOME=/path/to/android-sdk
 cd dither-werkstatt
 python3 -m http.server 8000</code><button class="copy" type="button">COPY</button></pre>
             <p>Then open http://localhost:8000. Or use it directly in the browser, nothing to install.</p>
-            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/dither-werkstatt">Repository</a><a class="btn" href="https://hjorven.github.io/dither-werkstatt/">Open</a></div>
+            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/dither-werkstatt">Repository</a><a class="btn" href="https://hjorven.github.io/dither-werkstatt/">Open live</a></div>
           </div>
         </details>
       </li>
@@ -548,7 +546,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
         <div class="kicker">IV &middot; Tools</div>
         <h3>Workshop for the look</h3>
         <p>A browser editor that turns images into 1-bit dither and ASCII art, the same style as this page.</p>
-        <div class="pic"><canvas data-noise="0.5"></canvas><span class="num">IV</span></div>
+        <div class="pic"><div class="art" role="img" aria-label="Engraving: an easel with a sphere in front of the canvas" style="--m:url(img/easel.png)"></div></div>
       </div>
     </div>
   </section>
@@ -561,7 +559,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
     <div class="faq">
       <details>
         <summary>Can I try the projects right away?</summary>
-        <p>Poly Battle, the Binary Clock and Du bleibst run on GitHub Pages. Open the link and you are in, no account and no install.</p>
+        <p>Poly Battle, the Binary Clock, Du bleibst and the Dither Workshop run on GitHub Pages. Open the link and you are in, no account and no install.</p>
       </details>
       <details>
         <summary>Does Poly Battle work on phones and iPads?</summary>
@@ -636,20 +634,15 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
 
   /* 1-Bit-Rauschflächen: Bayer-Raster über einem Verlauf mit etwas Körnung */
   const B = [0,48,12,60,3,51,15,63,32,16,44,28,35,19,47,31,8,56,4,52,11,59,7,55,40,24,36,20,43,27,39,23,2,50,14,62,1,49,13,61,34,18,46,30,33,17,45,29,10,58,6,54,9,57,5,53,42,26,38,22,41,25,37,21];
-  function dither(cv, level, fg, bg, mode) {
+  function dither(cv, fg, bg) {   // Strahlenkranz hinter der Live-Uhr
     const r = cv.getBoundingClientRect();
     const s = 2; // ein Rasterpunkt = 2 CSS-Pixel
     const W = Math.max(1, Math.round(r.width / s)), H = Math.max(1, Math.round(r.height / s));
     cv.width = W; cv.height = H;
     const ctx = cv.getContext('2d'), img = ctx.createImageData(W, H), d = img.data;
     for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-      let v;
-      if (mode === 'rays') {
-        const dx = x - W / 2, dy = y - H * 0.45, a = Math.atan2(dy, dx), rr = Math.hypot(dx, dy) / Math.max(W, H);
-        v = 0.08 + 0.5 * Math.max(0, 1 - rr * 2.2) + 0.08 * Math.sin(a * 24);
-      } else {
-        v = level + 0.25 * (y / H - 0.5) + 0.15 * Math.sin(x / W * 6 + y / H * 3);
-      }
+      const dx = x - W / 2, dy = y - H * 0.45, a = Math.atan2(dy, dx), rr = Math.hypot(dx, dy) / Math.max(W, H);
+      let v = 0.08 + 0.5 * Math.max(0, 1 - rr * 2.2) + 0.08 * Math.sin(a * 24);
       v += (Math.random() - 0.5) * 0.18;
       const on = v > (B[(y & 7) * 8 + (x & 7)] + 0.5) / 64;
       const c = on ? fg : bg, i = (y * W + x) * 4;
@@ -665,9 +658,8 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
   }
   const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
   function paint() {
-    const acc = cssColor('--accent'), ink = cssColor('--ink'), ink2 = cssColor('--ink-2');
-    document.querySelectorAll('canvas[data-noise]').forEach(c => dither(c, +c.dataset.noise, acc, ink2));
-    dither(document.getElementById('tabula-bg'), 0, mix(ink2, acc, 0.35), ink2, 'rays');
+    const acc = cssColor('--accent'), ink2 = cssColor('--ink-2');
+    dither(document.getElementById('tabula-bg'), mix(ink2, acc, 0.35), ink2);
   }
   paint();
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(paint, 200); });
@@ -681,7 +673,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
     modeBtn.setAttribute('aria-pressed', root.dataset.theme === 'light');
     swatches.forEach(b => { b.setAttribute('aria-checked', b.dataset.a === root.dataset.accent); b.tabIndex = b.dataset.a === root.dataset.accent ? 0 : -1; });
   }
-  function syncThemeColor() { const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = getComputedStyle(root).getPropertyValue('--ink').trim() ? 'rgb(' + cssColor('--ink').join(',') + ')' : '#10112c'; }
+  function syncThemeColor() { const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = 'rgb(' + cssColor('--ink').join(',') + ')'; }
   function save() { try { localStorage.setItem('theme', root.dataset.theme); localStorage.setItem('accent', root.dataset.accent); } catch (e) {} }
 
   function wave(fromEl, apply) {
