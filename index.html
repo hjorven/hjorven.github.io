@@ -56,6 +56,7 @@
     --accent: #2424ff;
     --on-accent: #ffffff;
     --accent-soft: color-mix(in srgb, var(--accent) 55%, #ffffff);
+    --accent-text: color-mix(in srgb, var(--accent) 60%, var(--paper)); /* kleine Akzentschrift, lesbar in jeder Farbe */
     --serif: "Instrument Serif", "Times New Roman", serif;
     --mono: "Plex Mono", ui-monospace, monospace;
     --sans: "Inter Tight", system-ui, sans-serif;
@@ -66,11 +67,12 @@
     --ink-2: hsl(var(--h) 55% 83%);
     --line: hsl(var(--h) 35% 68%);
     --paper: hsl(var(--h) 55% 12%);
-    --muted: hsl(var(--h) 25% 34%);
+    --muted: hsl(var(--h) 25% 31%);
     --code-bg: hsl(var(--h) 65% 94%);
     --plate: hsl(var(--h) 70% 97%);
     --plate-ink: hsl(var(--h) 55% 12%);
-    --accent-soft: color-mix(in srgb, var(--accent) 80%, #000000);
+    --accent-soft: color-mix(in srgb, var(--accent) 60%, var(--paper));
+    --accent-text: color-mix(in srgb, var(--accent) 40%, var(--paper));
     color-scheme: light;
   }
   :root[data-accent="cobalt"] { --h: 238; --accent: #2424ff; --on-accent: #ffffff; }
@@ -78,7 +80,7 @@
   :root[data-accent="purple"] { --h: 283; --accent: #b02be3; --on-accent: #ffffff; }
   :root[data-accent="magenta"] { --h: 331; --accent: #ff2e93; --on-accent: hsl(var(--h) 60% 9%); }
   :root[data-accent="crimson"] { --h: 348; --accent: #d6143c; --on-accent: #ffffff; }
-  :root[data-accent="vermilion"] { --h: 10; --accent: #ee3a17; --on-accent: #ffffff; }
+  :root[data-accent="vermilion"] { --h: 10; --accent: #ee3a17; --on-accent: hsl(var(--h) 60% 9%); }
   :root[data-accent="orange"] { --h: 28; --accent: #ff7a00; --on-accent: hsl(var(--h) 60% 9%); }
   :root[data-accent="gold"] { --h: 44; --accent: #f2b200; --on-accent: hsl(var(--h) 60% 9%); }
   :root[data-accent="lime"] { --h: 78; --accent: #9bd400; --on-accent: hsl(var(--h) 60% 9%); }
@@ -150,7 +152,7 @@
   h2 { font-size: clamp(44px, 6vw, 76px); line-height: .95; }
   h3 { font-size: 30px; line-height: 1.05; }
   h1 em, h2 em { color: var(--accent-soft); }
-  sup.mark { font-family: var(--mono); font-size: 12px; color: var(--accent); vertical-align: top; margin-left: 6px; }
+  sup.mark { font-family: var(--mono); font-size: 12px; color: var(--accent-text); vertical-align: top; margin-left: 6px; }
 
   .btn {
     display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px;
@@ -277,7 +279,7 @@
   .werke b { font-family: var(--serif); font-weight: 400; font-size: 26px; line-height: 1.1; }
   .werke summary p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
   .werke .lang { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--muted); }
-  .werke .more { justify-self: end; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  .werke .more { justify-self: end; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-text); }
   .werke .more::after { content: " +"; }
   .werke details[open] .more::after { content: " \2212"; }
   .inst { margin: 0 0 22px 72px; max-width: 760px; }
@@ -442,8 +444,8 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
             <div class="kicker">Installation</div>
             <pre><code>git clone https://github.com/hjorven/Poly-battle-web.git
 cd Poly-battle-web
-npm run serve</code><button class="copy" type="button">COPY</button></pre>
-            <p>Then open http://localhost:8080. AI games, hotseat and the campaign run without a server; online matches use Supabase.</p>
+python3 -m http.server 8000</code><button class="copy" type="button">COPY</button></pre>
+            <p>Then open http://localhost:8000 (or run npm run serve, which serves it on port 8080). AI games, hotseat and the campaign run without a server; online matches use Supabase.</p>
             <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/Poly-battle-web">Repository</a><a class="btn" href="https://hjorven.github.io/Poly-battle-web/">Open live</a></div>
           </div>
         </details>
@@ -592,7 +594,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
 
 <canvas id="ripples" aria-hidden="true"></canvas>
 
-<div class="switch" role="group" aria-label="Appearance">
+<aside class="switch" aria-label="Appearance">
   <button class="mode" id="mode" type="button" aria-label="Switch between light and dark"><span class="orb" aria-hidden="true"></span><span id="mode-lbl">Dark</span></button>
   <div class="swatches" id="swatches" role="radiogroup" aria-label="Accent colour">
     <button class="swatch" type="button" role="radio" data-a="cobalt" style="--c:#2424ff" aria-label="Cobalt"></button>
@@ -609,7 +611,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
     <button class="swatch" type="button" role="radio" data-a="turquoise" style="--c:#00a8dc" aria-label="Turquoise"></button>
   </div>
   <span class="hint" aria-hidden="true">&#8596;</span>
-</div>
+</aside>
 
 <script>
   /* Befehls-Tabs mit Kopierknopf */
@@ -709,13 +711,13 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
     const i = swatches.findIndex(b => b.dataset.a === root.dataset.accent);
     const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
     if (!d) return; e.preventDefault();
-    const n = swatches[(i + d + swatches.length) % swatches.length]; n.focus(); n.click(); n.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    const n = swatches[(i + d + swatches.length) % swatches.length]; n.focus(); n.click(); n.scrollIntoView({ block: 'nearest', inline: 'center' });
   });
   document.getElementById('swatches').addEventListener('wheel', e => {
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { e.currentTarget.scrollLeft += e.deltaY; e.preventDefault(); }
   }, { passive: false });
   syncUI(); syncThemeColor();
-  swatches.find(b => b.dataset.a === root.dataset.accent)?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  swatches.find(b => b.dataset.a === root.dataset.accent)?.scrollIntoView({ block: 'nearest', inline: 'center' });
 
   /* ---------- Animationen ---------- */
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;

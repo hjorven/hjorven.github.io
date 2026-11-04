@@ -6,7 +6,7 @@ Live: https://hjorven.github.io/
 
 ## Features
 
-- Six featured projects with install commands for each one
+- Six projects (four featured) with install commands for each one
 - Live binary clock
 - Light and dark theme plus 12 accent colours; every switch spreads across the page as a wave (View Transitions API)
 - Animations: engravings develop dot by dot as they scroll into view, the hero icosahedron turns (24 pre-rendered frames) with scroll parallax, and taps send out a dithered ripple. All of it is off when the system asks for reduced motion.
