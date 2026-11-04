@@ -12,6 +12,10 @@ Live: https://hjorven.github.io/
 - Animations: engravings develop dot by dot as they scroll into view, the hero icosahedron turns (24 pre-rendered frames) with scroll parallax, a dither lens follows mouse or finger, and taps send out a dithered ripple. All of it is off when the system asks for reduced motion.
 - No build step, no frameworks, no trackers. Fonts are self-hosted.
 
+## Wallpapers
+
+The wallpapers live in their own repository now: [hjorven/wallpapers](https://github.com/hjorven/wallpapers), served at https://hjorven.github.io/wallpapers/. GitHub Pages serves that project site under the same path, so the old link keeps working.
+
 ## Run locally
 
 ```bash
