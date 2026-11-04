@@ -56,6 +56,7 @@
     --accent: #2424ff;
     --on-accent: #ffffff;
     --accent-soft: color-mix(in srgb, var(--accent) 55%, #ffffff);
+    --accent-text: color-mix(in srgb, var(--accent) 60%, var(--paper)); /* kleine Akzentschrift, lesbar in jeder Farbe */
     --serif: "Instrument Serif", "Times New Roman", serif;
     --mono: "Plex Mono", ui-monospace, monospace;
     --sans: "Inter Tight", system-ui, sans-serif;
@@ -66,11 +67,12 @@
     --ink-2: hsl(var(--h) 55% 83%);
     --line: hsl(var(--h) 35% 68%);
     --paper: hsl(var(--h) 55% 12%);
-    --muted: hsl(var(--h) 25% 34%);
+    --muted: hsl(var(--h) 25% 31%);
     --code-bg: hsl(var(--h) 65% 94%);
     --plate: hsl(var(--h) 70% 97%);
     --plate-ink: hsl(var(--h) 55% 12%);
-    --accent-soft: color-mix(in srgb, var(--accent) 80%, #000000);
+    --accent-soft: color-mix(in srgb, var(--accent) 60%, var(--paper));
+    --accent-text: color-mix(in srgb, var(--accent) 40%, var(--paper));
     color-scheme: light;
   }
   :root[data-accent="cobalt"] { --h: 238; --accent: #2424ff; --on-accent: #ffffff; }
@@ -78,7 +80,7 @@
   :root[data-accent="purple"] { --h: 283; --accent: #b02be3; --on-accent: #ffffff; }
   :root[data-accent="magenta"] { --h: 331; --accent: #ff2e93; --on-accent: hsl(var(--h) 60% 9%); }
   :root[data-accent="crimson"] { --h: 348; --accent: #d6143c; --on-accent: #ffffff; }
-  :root[data-accent="vermilion"] { --h: 10; --accent: #ee3a17; --on-accent: #ffffff; }
+  :root[data-accent="vermilion"] { --h: 10; --accent: #ee3a17; --on-accent: hsl(var(--h) 60% 9%); }
   :root[data-accent="orange"] { --h: 28; --accent: #ff7a00; --on-accent: hsl(var(--h) 60% 9%); }
   :root[data-accent="gold"] { --h: 44; --accent: #f2b200; --on-accent: hsl(var(--h) 60% 9%); }
   :root[data-accent="lime"] { --h: 78; --accent: #9bd400; --on-accent: hsl(var(--h) 60% 9%); }
@@ -150,7 +152,7 @@
   h2 { font-size: clamp(44px, 6vw, 76px); line-height: .95; }
   h3 { font-size: 30px; line-height: 1.05; }
   h1 em, h2 em { color: var(--accent-soft); }
-  sup.mark { font-family: var(--mono); font-size: 12px; color: var(--accent); vertical-align: top; margin-left: 6px; }
+  sup.mark { font-family: var(--mono); font-size: 12px; color: var(--accent-text); vertical-align: top; margin-left: 6px; }
 
   .btn {
     display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px;
@@ -224,13 +226,13 @@
 
   /* Principia (Merkmale) */
   .principia { display: grid; grid-template-columns: repeat(4, 1fr); gap: 56px 22px; }
+  .princ { display: flex; flex-direction: column; }
+  .princ .pic { margin-top: auto; }
   .princ .kicker { margin-bottom: 6px; }
   .princ h3 { margin-bottom: 10px; }
   .princ p { color: var(--muted); margin: 0 0 18px; max-width: 34ch; }
   .princ .pic { aspect-ratio: 4 / 3; overflow: hidden; position: relative; background: var(--ink-2); }
   .princ .pic .art { width: 100%; height: 100%; }
-  .princ .pic canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
-  .princ .pic .num { position: absolute; left: 14px; bottom: 6px; font-family: var(--serif); font-size: 64px; color: var(--ink); line-height: 1; }
 
   /* Quaestiones (FAQ) */
   .faq details { border-top: 1px solid var(--line); }
@@ -277,7 +279,7 @@
   .werke b { font-family: var(--serif); font-weight: 400; font-size: 26px; line-height: 1.1; }
   .werke summary p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
   .werke .lang { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--muted); }
-  .werke .more { justify-self: end; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  .werke .more { justify-self: end; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-text); }
   .werke .more::after { content: " +"; }
   .werke details[open] .more::after { content: " \2212"; }
   .inst { margin: 0 0 22px 72px; max-width: 760px; }
@@ -336,7 +338,7 @@
 
       <div class="stats">
         <div><b>VI</b><span>Projects</span></div>
-        <div><b>III</b><span>Live in the browser</span></div>
+        <div><b>IV</b><span>Live in the browser</span></div>
         <div><b>IV</b><span>Languages</span></div>
       </div>
 
@@ -442,8 +444,8 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
             <div class="kicker">Installation</div>
             <pre><code>git clone https://github.com/hjorven/Poly-battle-web.git
 cd Poly-battle-web
-npm run serve</code><button class="copy" type="button">COPY</button></pre>
-            <p>Then open http://localhost:8080. AI games, hotseat and the campaign run without a server; online matches use Supabase.</p>
+python3 -m http.server 8000</code><button class="copy" type="button">COPY</button></pre>
+            <p>Then open http://localhost:8000 (or run npm run serve, which serves it on port 8080). AI games, hotseat and the campaign run without a server; online matches use Supabase.</p>
             <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/Poly-battle-web">Repository</a><a class="btn" href="https://hjorven.github.io/Poly-battle-web/">Open live</a></div>
           </div>
         </details>
@@ -509,7 +511,7 @@ export ANDROID_HOME=/path/to/android-sdk
 cd dither-werkstatt
 python3 -m http.server 8000</code><button class="copy" type="button">COPY</button></pre>
             <p>Then open http://localhost:8000. Or use it directly in the browser, nothing to install.</p>
-            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/dither-werkstatt">Repository</a><a class="btn" href="https://hjorven.github.io/dither-werkstatt/">Open</a></div>
+            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/dither-werkstatt">Repository</a><a class="btn" href="https://hjorven.github.io/dither-werkstatt/">Open live</a></div>
           </div>
         </details>
       </li>
@@ -546,7 +548,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
         <div class="kicker">IV &middot; Tools</div>
         <h3>Workshop for the look</h3>
         <p>A browser editor that turns images into 1-bit dither and ASCII art, the same style as this page.</p>
-        <div class="pic"><canvas data-noise="0.5"></canvas><span class="num">IV</span></div>
+        <div class="pic"><div class="art" role="img" aria-label="Engraving: an easel with a sphere in front of the canvas" style="--m:url(img/easel.png)"></div></div>
       </div>
     </div>
   </section>
@@ -559,7 +561,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
     <div class="faq">
       <details>
         <summary>Can I try the projects right away?</summary>
-        <p>Poly Battle, the Binary Clock and Du bleibst run on GitHub Pages. Open the link and you are in, no account and no install.</p>
+        <p>Poly Battle, the Binary Clock, Du bleibst and the Dither Workshop run on GitHub Pages. Open the link and you are in, no account and no install.</p>
       </details>
       <details>
         <summary>Does Poly Battle work on phones and iPads?</summary>
@@ -592,7 +594,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
 
 <canvas id="ripples" aria-hidden="true"></canvas>
 
-<div class="switch" role="group" aria-label="Appearance">
+<aside class="switch" aria-label="Appearance">
   <button class="mode" id="mode" type="button" aria-label="Switch between light and dark"><span class="orb" aria-hidden="true"></span><span id="mode-lbl">Dark</span></button>
   <div class="swatches" id="swatches" role="radiogroup" aria-label="Accent colour">
     <button class="swatch" type="button" role="radio" data-a="cobalt" style="--c:#2424ff" aria-label="Cobalt"></button>
@@ -609,7 +611,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
     <button class="swatch" type="button" role="radio" data-a="turquoise" style="--c:#00a8dc" aria-label="Turquoise"></button>
   </div>
   <span class="hint" aria-hidden="true">&#8596;</span>
-</div>
+</aside>
 
 <script>
   /* Befehls-Tabs mit Kopierknopf */
@@ -634,20 +636,15 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
 
   /* 1-Bit-Rauschflächen: Bayer-Raster über einem Verlauf mit etwas Körnung */
   const B = [0,48,12,60,3,51,15,63,32,16,44,28,35,19,47,31,8,56,4,52,11,59,7,55,40,24,36,20,43,27,39,23,2,50,14,62,1,49,13,61,34,18,46,30,33,17,45,29,10,58,6,54,9,57,5,53,42,26,38,22,41,25,37,21];
-  function dither(cv, level, fg, bg, mode) {
+  function dither(cv, fg, bg) {   // Strahlenkranz hinter der Live-Uhr
     const r = cv.getBoundingClientRect();
     const s = 2; // ein Rasterpunkt = 2 CSS-Pixel
     const W = Math.max(1, Math.round(r.width / s)), H = Math.max(1, Math.round(r.height / s));
     cv.width = W; cv.height = H;
     const ctx = cv.getContext('2d'), img = ctx.createImageData(W, H), d = img.data;
     for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-      let v;
-      if (mode === 'rays') {
-        const dx = x - W / 2, dy = y - H * 0.45, a = Math.atan2(dy, dx), rr = Math.hypot(dx, dy) / Math.max(W, H);
-        v = 0.08 + 0.5 * Math.max(0, 1 - rr * 2.2) + 0.08 * Math.sin(a * 24);
-      } else {
-        v = level + 0.25 * (y / H - 0.5) + 0.15 * Math.sin(x / W * 6 + y / H * 3);
-      }
+      const dx = x - W / 2, dy = y - H * 0.45, a = Math.atan2(dy, dx), rr = Math.hypot(dx, dy) / Math.max(W, H);
+      let v = 0.08 + 0.5 * Math.max(0, 1 - rr * 2.2) + 0.08 * Math.sin(a * 24);
       v += (Math.random() - 0.5) * 0.18;
       const on = v > (B[(y & 7) * 8 + (x & 7)] + 0.5) / 64;
       const c = on ? fg : bg, i = (y * W + x) * 4;
@@ -663,9 +660,8 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
   }
   const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
   function paint() {
-    const acc = cssColor('--accent'), ink = cssColor('--ink'), ink2 = cssColor('--ink-2');
-    document.querySelectorAll('canvas[data-noise]').forEach(c => dither(c, +c.dataset.noise, acc, ink2));
-    dither(document.getElementById('tabula-bg'), 0, mix(ink2, acc, 0.35), ink2, 'rays');
+    const acc = cssColor('--accent'), ink2 = cssColor('--ink-2');
+    dither(document.getElementById('tabula-bg'), mix(ink2, acc, 0.35), ink2);
   }
   paint();
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(paint, 200); });
@@ -679,7 +675,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
     modeBtn.setAttribute('aria-pressed', root.dataset.theme === 'light');
     swatches.forEach(b => { b.setAttribute('aria-checked', b.dataset.a === root.dataset.accent); b.tabIndex = b.dataset.a === root.dataset.accent ? 0 : -1; });
   }
-  function syncThemeColor() { const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = getComputedStyle(root).getPropertyValue('--ink').trim() ? 'rgb(' + cssColor('--ink').join(',') + ')' : '#10112c'; }
+  function syncThemeColor() { const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = 'rgb(' + cssColor('--ink').join(',') + ')'; }
   function save() { try { localStorage.setItem('theme', root.dataset.theme); localStorage.setItem('accent', root.dataset.accent); } catch (e) {} }
 
   function wave(fromEl, apply) {
@@ -715,13 +711,13 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
     const i = swatches.findIndex(b => b.dataset.a === root.dataset.accent);
     const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
     if (!d) return; e.preventDefault();
-    const n = swatches[(i + d + swatches.length) % swatches.length]; n.focus(); n.click(); n.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    const n = swatches[(i + d + swatches.length) % swatches.length]; n.focus(); n.click(); n.scrollIntoView({ block: 'nearest', inline: 'center' });
   });
   document.getElementById('swatches').addEventListener('wheel', e => {
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { e.currentTarget.scrollLeft += e.deltaY; e.preventDefault(); }
   }, { passive: false });
   syncUI(); syncThemeColor();
-  swatches.find(b => b.dataset.a === root.dataset.accent)?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  swatches.find(b => b.dataset.a === root.dataset.accent)?.scrollIntoView({ block: 'nearest', inline: 'center' });
 
   /* ---------- Animationen ---------- */
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
