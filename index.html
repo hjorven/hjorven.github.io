@@ -1,248 +1,721 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>jorven</title>
-<meta name="description" content="jorven – Student & sometimes dev from Germany. Open source is king.">
-<meta property="og:title" content="jorven">
-<meta property="og:description" content="Student & hobbyist developer from Germany. Open source contributor.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://jorven.dpdns.org/">
-<meta name="twitter:card" content="summary">
-<meta name="theme-color" content="#0a0e14">
-
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hjorven Portfolio</title>
+<meta name="description" content="Portfolio of hjorven: browser games, websites and apps, with install commands for every project.">
+<script>
+  (function () {
+    var t = null, a = null;
+    try { t = localStorage.getItem('theme'); a = localStorage.getItem('accent'); } catch (e) {}
+    if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    document.documentElement.dataset.theme = t;
+    var ok = ['cobalt','violet','purple','magenta','crimson','vermilion','orange','gold','lime','green','patina','turquoise'];
+    document.documentElement.dataset.accent = ok.indexOf(a) >= 0 ? a : 'cobalt';
+  })();
+</script>
 <style>
-  /* ── CSS Reset: because every browser has its own opinion ── */
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @font-face { font-family: "Instrument Serif"; src: url("fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Instrument Serif"; src: url("fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+  @font-face { font-family: "Plex Mono"; src: url("fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "Inter Tight"; src: url("fonts/inter-tight-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
 
-  /* ── Variables. Ja, ist fancy. Brauch ich Sass? Nee, is klar. ── */
+  /* Farbschema: Jede Akzentfarbe färbt die ganze Seite über ihren Farbton --h ein (dunkel = Standard, hell per data-theme) */
   :root {
-    --bg:      #0a0e14;  /* Night mode: enabled */
-    --fg:      #b3b1ad;  /* Readable. Mostly. */
-    --red:     #cc6666;  /* For important stuff */
-    --red-hot: #fb4934;  /* For PANIC */
-    --pink:    #d3869b;  /* For pretty things */
-    --dim:     #504945;  /* For unimportant junk. Like my GitHub repo. */
-    --bright:  #ebdbb2;  /* Blinds you. You were warned. */
-    --green:   #98971a;  /* For success. Rarely used. */
-    --yellow:  #d79921;  /* Caution! */
+    --h: 238; --s: 48%;
+    --ink: hsl(var(--h) var(--s) 11%);        /* Hintergrund */
+    --ink-2: hsl(var(--h) var(--s) 15%);      /* Flächen */
+    --line: hsl(var(--h) 38% 27%);            /* Haarlinien */
+    --paper: hsl(var(--h) 45% 94%);           /* Text */
+    --muted: hsl(var(--h) 30% 72%);
+    --code-bg: hsl(var(--h) 52% 8%);
+    --plate: hsl(var(--h) 45% 94%);           /* Tafel der Live-Uhr */
+    --plate-ink: hsl(var(--h) 50% 11%);
+    --accent: #2424ff;
+    --on-accent: #ffffff;
+    --accent-soft: color-mix(in srgb, var(--accent) 55%, #ffffff);
+    --serif: "Instrument Serif", "Times New Roman", serif;
+    --mono: "Plex Mono", ui-monospace, monospace;
+    --sans: "Inter Tight", system-ui, sans-serif;
+    color-scheme: dark;
   }
+  :root[data-theme="light"] {
+    --ink: hsl(var(--h) 62% 89%);
+    --ink-2: hsl(var(--h) 55% 83%);
+    --line: hsl(var(--h) 35% 68%);
+    --paper: hsl(var(--h) 55% 12%);
+    --muted: hsl(var(--h) 25% 34%);
+    --code-bg: hsl(var(--h) 65% 94%);
+    --plate: hsl(var(--h) 70% 97%);
+    --plate-ink: hsl(var(--h) 55% 12%);
+    --accent-soft: color-mix(in srgb, var(--accent) 80%, #000000);
+    color-scheme: light;
+  }
+  :root[data-accent="cobalt"] { --h: 238; --accent: #2424ff; --on-accent: #ffffff; }
+  :root[data-accent="violet"] { --h: 262; --accent: #7a2cff; --on-accent: #ffffff; }
+  :root[data-accent="purple"] { --h: 283; --accent: #b02be3; --on-accent: #ffffff; }
+  :root[data-accent="magenta"] { --h: 331; --accent: #ff2e93; --on-accent: hsl(var(--h) 60% 9%); }
+  :root[data-accent="crimson"] { --h: 348; --accent: #d6143c; --on-accent: #ffffff; }
+  :root[data-accent="vermilion"] { --h: 10; --accent: #ee3a17; --on-accent: #ffffff; }
+  :root[data-accent="orange"] { --h: 28; --accent: #ff7a00; --on-accent: hsl(var(--h) 60% 9%); }
+  :root[data-accent="gold"] { --h: 44; --accent: #f2b200; --on-accent: hsl(var(--h) 60% 9%); }
+  :root[data-accent="lime"] { --h: 78; --accent: #9bd400; --on-accent: hsl(var(--h) 60% 9%); }
+  :root[data-accent="green"] { --h: 135; --accent: #1fb043; --on-accent: hsl(var(--h) 60% 9%); }
+  :root[data-accent="patina"] { --h: 166; --accent: #10b08b; --on-accent: hsl(var(--h) 60% 9%); }
+  :root[data-accent="turquoise"] { --h: 195; --accent: #00a8dc; --on-accent: hsl(var(--h) 60% 9%); }
 
-  /* ── Body: Centered like my thoughts at 3 Uhr nachts ── */
+  /* Gravuren: 1-Bit-Masken, eingefärbt mit der Akzentfarbe */
+  .art { position: relative; background: var(--ink-2); }
+  .art::after { content: ""; position: absolute; inset: 0; background: var(--accent);
+    -webkit-mask: var(--m) center / 240px 240px no-repeat; mask: var(--m) center / 240px 240px no-repeat; }
+  /* Masken nur in ganzzahligen Maßstäben (1 Rasterpunkt = 1 oder 2 CSS-Pixel), sonst entsteht Moiré */
+  .hero-art { aspect-ratio: 760 / 725; background: transparent; }
+  .hero-art::after { background: var(--paper); -webkit-mask-size: contain; mask-size: contain; }
+  @media (max-width: 560px) { .opus .art::after { -webkit-mask-size: 480px 480px; mask-size: 480px 480px; } }
+
+  /* Schalter für Thema und Farbe */
+  .switch { position: fixed; right: 16px; bottom: 16px; z-index: 50; display: flex; align-items: center; gap: 8px;
+    padding: 6px; background: var(--ink); border: 1px solid var(--line); box-shadow: 4px 4px 0 var(--accent); }
+  .mode { all: unset; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 6px 10px 6px 6px; border-right: 1px solid var(--line);
+    font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--paper); }
+  .mode:focus-visible, .swatch:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .orb { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--paper); position: relative; overflow: hidden; }
+  .orb::after { content: ""; position: absolute; inset: 0 0 0 50%;
+    background: radial-gradient(var(--paper) 0.8px, transparent 1px) 0 0 / 3px 3px; transition: inset .4s; }
+  :root[data-theme="light"] .orb::after { inset: 0 50% 0 0; }
+  .swatches { display: flex; gap: 6px; max-width: 162px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 3px; }
+  .swatches::-webkit-scrollbar { display: none; }
+  .swatch { all: unset; cursor: pointer; flex: none; width: 24px; height: 24px; scroll-snap-align: start; background: var(--c);
+    background-image: radial-gradient(rgba(0,0,0,.35) 0.7px, transparent 0.9px); background-size: 3px 3px; }
+  .swatch[aria-checked="true"] { outline: 2px solid var(--paper); outline-offset: 2px; }
+  .switch .hint { font-family: var(--mono); font-size: 9px; letter-spacing: .14em; color: var(--muted); padding-right: 4px; }
+  @media (max-width: 560px) { .switch { left: 16px; right: 16px; justify-content: space-between; } .swatches { max-width: none; flex: 1; } .switch .hint { display: none; } }
+
+  /* Wellen-Übergang (View Transitions) */
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+  ::view-transition-new(root) { z-index: 2; }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
-    font-size: 14px;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 20px;
-    /* CRT scanlines. Retro. Läuft bei dir. */
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0,0,0,0.03) 2px,
-      rgba(0,0,0,0.03) 4px
-    );
+    margin: 0; background: var(--ink); color: var(--paper);
+    font-family: var(--sans); font-size: 15px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
   }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; height: auto; image-rendering: pixelated; }
+  .wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
 
-  /* ── Terminal window. Content incoming in 0.1s.  ── */
-  .terminal {
-    max-width: 780px;
-    width: 100%;
-    opacity: 0;               /* *drum roll* */
-    animation: fadeIn 0.4s ease 0.1s forwards;
+  .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; letter-spacing: -.015em; }
+  h1 { font-size: clamp(56px, 9vw, 118px); line-height: .88; }
+  h2 { font-size: clamp(44px, 6vw, 76px); line-height: .95; }
+  h3 { font-size: 30px; line-height: 1.05; }
+  h1 em, h2 em { color: var(--accent-soft); }
+  sup.mark { font-family: var(--mono); font-size: 12px; color: var(--accent); vertical-align: top; margin-left: 6px; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; text-decoration: none;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); cursor: pointer;
   }
+  .btn.ghost { background: transparent; border-color: var(--line); color: var(--paper); }
+  .btn:hover { filter: brightness(1.2); }
+  .btn.ghost:hover { border-color: var(--paper); }
 
-  /* ── Top section: ASCII logo meets info grid ── */
-  .top {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0 2.5rem;
-    align-items: start;
-    margin-bottom: 1.6rem;
+  /* Navigation */
+  nav { border-bottom: 1px solid var(--line); }
+  nav .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 72px; }
+  nav .links { display: flex; gap: 28px; }
+  nav .links a { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; text-decoration: none; color: var(--muted); }
+  nav .links a:hover { color: var(--paper); }
+  .logo { font-family: var(--serif); font-size: 24px; line-height: .85; text-align: center; text-decoration: none; letter-spacing: .02em; }
+  .logo small { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .3em; color: var(--muted); margin-top: 4px; }
+  nav .right { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 24px; align-items: center; padding: 56px 0 24px; }
+  .hero > * { min-width: 0; }
+  .hero p.lead { max-width: 42ch; color: var(--muted); font-size: 17px; margin: 22px 0 26px; }
+  .hero .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .hero figure { margin: 0; }
+  .term { margin-top: 34px; max-width: 520px; }
+  .term .tabs { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--accent); border-bottom: 0; }
+  .term .tabs button { all: unset; cursor: pointer; text-align: center; padding: 7px 0; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  .term .tabs button[aria-selected="true"] { background: var(--accent); color: var(--on-accent); }
+  .term pre {
+    margin: 0; border: 1px solid var(--accent); background: var(--code-bg); padding: 12px 14px;
+    font-family: var(--mono); font-size: 12px; line-height: 1.7; overflow-x: auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
   }
+  .term code { white-space: pre; }
+  .copy { all: unset; cursor: pointer; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; color: var(--muted); }
+  .copy:hover { color: var(--paper); }
 
-  /* ── The "logo". Yes, it's ASCII art. ── */
-  .logo {
-    font-size: clamp(9px, 1.7vw, 14px); /* scales so it fits every screen */
-    line-height: 1.2;
-    color: var(--red);
-    white-space: pre;          /* please don't wrap, thanks */
-    display: block;
-    overflow-x: auto;          /* never breaks on tiny screens */
+  /* Tabula: Live-Uhr */
+  .tabula { margin: 56px 0 0; border: 1px solid var(--line); background: var(--ink-2); position: relative; overflow: hidden; }
+  .tabula canvas.bg { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+  .tabula .plate {
+    position: relative; margin: clamp(20px, 6vw, 64px) auto; width: min(640px, 100% - 32px);
+    background: var(--plate); color: var(--plate-ink); padding: 26px 24px 22px; box-shadow: 10px 10px 0 var(--accent);
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
   }
+  .plate .head { width: 100%; display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
+  .plate .title { font-family: var(--serif); font-size: clamp(30px, 6vw, 46px); line-height: 1; }
+  .clock { display: flex; gap: clamp(14px, 4vw, 32px); }
+  .grp { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .cols { display: flex; gap: clamp(6px, 1.8vw, 12px); }
+  .col { display: flex; flex-direction: column-reverse; gap: clamp(6px, 1.8vw, 12px); }
+  .bit { width: clamp(22px, 6vw, 38px); aspect-ratio: 1; border: 1.5px solid var(--plate-ink);
+         background: repeating-linear-gradient(135deg, var(--plate-ink) 0 1px, transparent 1px 5px); }
+  .bit.on { background: var(--accent); border-color: var(--accent);
+            background-image: radial-gradient(var(--plate) 0.8px, transparent 1px); background-size: 4px 4px; }
+  .bit.off { visibility: hidden; }
+  .grp span { font-family: var(--mono); font-size: 9px; letter-spacing: .25em; }
+  .roman { font-family: var(--serif); font-style: italic; font-size: 26px; }
 
-  /* ── Info table. More flexible than my schedule. ── */
-  .info {
-    display: grid;
-    grid-template-columns: auto auto 1fr;
-    gap: 0.18rem 0.5rem;
-    align-content: center;
-    font-size: 13.5px;
-    line-height: 1.6;
+  section { padding: 110px 0 0; }
+  .sec-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 40px; flex-wrap: wrap; }
+  .sec-head p { max-width: 46ch; color: var(--muted); margin: 14px 0 0; }
+
+  /* Opera (Projekte) */
+  .opera { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .opus { position: relative; border: 1px solid var(--line); background: var(--ink-2); display: flex; flex-direction: column; }
+  .opus img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+  .opus .body { padding: 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .opus p { margin: 0; color: var(--muted); }
+  .opus .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 8px; }
+  .status { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; padding: 3px 7px; border: 1px solid var(--line); }
+  .status.live { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+  /* Principia (Merkmale) */
+  .principia { display: grid; grid-template-columns: repeat(4, 1fr); gap: 56px 22px; }
+  .princ .kicker { margin-bottom: 6px; }
+  .princ h3 { margin-bottom: 10px; }
+  .princ p { color: var(--muted); margin: 0 0 18px; max-width: 34ch; }
+  .princ .pic { aspect-ratio: 4 / 3; overflow: hidden; position: relative; background: var(--ink-2); }
+  .princ .pic .art { width: 100%; height: 100%; }
+  .princ .pic canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+  .princ .pic .num { position: absolute; left: 14px; bottom: 6px; font-family: var(--serif); font-size: 64px; color: var(--ink); line-height: 1; }
+
+  /* Quaestiones (FAQ) */
+  .faq details { border-top: 1px solid var(--line); }
+  .faq details:last-child { border-bottom: 1px solid var(--line); }
+  .faq summary { list-style: none; cursor: pointer; padding: 20px 0; display: flex; justify-content: space-between; gap: 16px; font-family: var(--serif); font-size: 24px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; font-family: var(--mono); font-size: 16px; color: var(--accent); }
+  .faq details[open] summary::after { content: "\2212"; }
+  .faq details p { margin: 0 0 22px; color: var(--muted); max-width: 70ch; }
+
+  /* Fuß */
+  footer { margin-top: 120px; border-top: 1px solid var(--line); position: relative; overflow: hidden; }
+  footer .giant { font-family: var(--serif); font-size: clamp(90px, 22vw, 300px); line-height: .8; text-align: center; color: transparent; -webkit-text-stroke: 1px var(--line); user-select: none; margin: 30px 0 0; }
+  footer .row { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 26px 0 90px; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  footer .row a { text-decoration: none; }
+  footer .row a:hover { color: var(--paper); }
+
+
+  /* Kennzahlen im Hero */
+  .stats { display: flex; gap: 28px; margin-top: 30px; }
+  .stats b { display: block; font-family: var(--serif); font-weight: 400; font-size: 40px; line-height: 1; }
+  .stats span { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .term a { color: var(--paper); }
+  .plate .head a { color: var(--plate-ink); text-decoration: none; border-bottom: 1px solid var(--plate-ink); }
+
+  /* Hauptwerke: 2 x 2, Bild links */
+  .opera { grid-template-columns: repeat(2, 1fr); }
+  .opus { flex-direction: row; }
+  .opus .art { width: 240px; flex: none; min-height: 240px; }
+  .links2 { display: flex; gap: 6px; }
+  .opus img, .princ img { image-rendering: auto; }
+
+  /* Verzeichnis */
+  .filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+  .filters button { all: unset; cursor: pointer; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 9px; border: 1px solid var(--line); color: var(--muted); }
+  .filters button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .werke { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--paper); }
+  .werke li { border-bottom: 1px solid var(--line); }
+  .werke li[hidden] { display: none; }
+  .werke summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 56px 1fr 120px 90px; gap: 16px; align-items: center; padding: 16px 0; }
+  .werke summary::-webkit-details-marker { display: none; }
+  .werke summary:hover b { color: var(--accent-soft); }
+  .werke .n { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--muted); }
+  .werke b { font-family: var(--serif); font-weight: 400; font-size: 26px; line-height: 1.1; }
+  .werke summary p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+  .werke .lang { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--muted); }
+  .werke .more { justify-self: end; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  .werke .more::after { content: " +"; }
+  .werke details[open] .more::after { content: " \2212"; }
+  .inst { margin: 0 0 22px 72px; max-width: 760px; }
+  .inst pre { margin: 8px 0 10px; border: 1px solid var(--accent); background: var(--code-bg); padding: 12px 14px; font-family: var(--mono); font-size: 12px; line-height: 1.7; overflow-x: auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .inst code { white-space: pre; }
+  .inst p { margin: 0 0 12px; color: var(--muted); font-size: 14px; }
+  .inst-links { display: flex; gap: 6px; }
+
+  @media (max-width: 860px) {
+    nav .wrap { grid-template-columns: 1fr auto; }
+    nav .links { display: none; }
+    .logo { text-align: left; }
+    .hero { grid-template-columns: 1fr; padding-top: 36px; }
+    .hero figure { order: -1; max-width: 420px; margin-inline: auto; }
+    .opera { grid-template-columns: 1fr; }
+    .werke summary { grid-template-columns: 40px 1fr auto; }
+    .werke .lang { display: none; }
+    .inst { margin-left: 0; }
+    .principia { grid-template-columns: 1fr 1fr; gap: 44px 18px; }
+    section { padding-top: 80px; }
   }
-  .info-key   { color: var(--pink); }
-  .info-arrow { color: var(--dim); }
-  .info-val   { color: var(--bright); }
-  .info-val a { color: var(--red); text-decoration: none; transition: color 0.15s; }
-  .info-val a:hover { color: var(--red-hot); text-decoration: underline; }
-
-  /* ── Sections: Projects & Links. Two columns. Like my brain. ── */
-  .sections {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 3rem;
-    font-size: 13.5px;
-    line-height: 1.7;
-  }
-
-  .section-title {
-    color: var(--dim);
-    margin-bottom: 0.3rem;
-    font-size: 13px;
-  }
-
-  .section ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  /* ── List items: arrow + text side by side. Digga, ist doch ganz einfach. ── */
-  .section ul li { display: flex; gap: 0.4rem; align-items: baseline; }
-  .section ul li .arrow { color: var(--dim); flex-shrink: 0; }
-  .section ul li span:last-child { min-width: 0; overflow-wrap: break-word; }
-
-  /* ── Links. Red. Like a stoplight. Fühl ich. ── */
-  a { color: var(--red); text-decoration: none; transition: color 0.15s; }
-  a:hover { color: var(--red-hot); text-decoration: underline; }
-
-  .note { color: var(--dim); font-size: 12.5px; }
-
-  /* ── Prompt: $ do stuff ── */
-  .prompt-line {
-    margin-top: 1.6rem;
-    font-size: 13.5px;
-  }
-  .prompt-line .user { color: var(--bright); }
-  .prompt-line .at   { color: var(--dim); }
-  .prompt-line .host { color: var(--pink); }
-  .prompt-line .path { color: var(--yellow); }
-
-  /* ── Blinking cursor. Annoying? Yes. That's the point. ── */
-  .cursor {
-    display: inline-block;
-    width: 8px;
-    height: 1em;
-    background: var(--red-hot);
-    vertical-align: text-bottom;
-    margin-left: 2px;
-    animation: blink 1.1s step-start infinite;
-  }
-
-  /* ── Phone mode. For people without a mouse. ── */
-  @media (max-width: 600px) {
-    body { padding: 16px; }
-
-    .top {
-      grid-template-columns: 1fr;
-      gap: 1.5rem 0;
-    }
-
-    /* Phones are small. Clamp handles the sizing. You're welcome. */
-    .logo {
-      line-height: 1.25;
-    }
-
-    .info { 
-      font-size: 13.5px; 
-    }
-
-    .sections {
-      grid-template-columns: 1fr;
-      gap: 1.5rem 0;
-    }
-  }
-
-  /* ── Blink. Like me. Aber nur am Wochenende. ── */
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0; }
-  }
-
-  /* ── Fade in. More dramatic than necessary. ── */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
+  @media (max-width: 560px) {
+    .principia { grid-template-columns: 1fr; }
+    .term .tabs button { font-size: 9px; letter-spacing: .08em; }
+    .faq summary { font-size: 21px; }
+    .opus { flex-direction: column; }
+    .opus .art { width: 100%; aspect-ratio: 1; min-height: 0; }
+    .werke summary { grid-template-columns: 34px 1fr; }
+    .werke .more { grid-column: 2; justify-self: start; }
+    .werke b { font-size: 23px; }
+    .stats { gap: 18px; }
+    .term pre, .inst pre { flex-direction: column-reverse; gap: 6px; }
+    .term pre .copy, .inst pre .copy { align-self: flex-end; }
+    .term code, .inst code { white-space: pre-wrap; word-break: break-all; }
   }
 </style>
 </head>
 <body>
-<main class="terminal">
 
-  <!-- ──── Header: Logo + info. Not Facebook. ──── -->
-  <div class="top">
-    <!-- ASCII art. Yes, handmade. And yes it took 40 mins. -->
-    <div class="logo" role="img" aria-label="jorven ASCII Logo">
- ▄▄▄██▀▀▀▒█████   ██▀███   ██▒   █▓▓█████  ███▄    █
-   ▒██  ▒██▒  ██▒▓██ ▒ ██▒▓██░   █▒▓█   ▀  ██ ▀█   █
-   ░██  ▒██░  ██▒▓██ ░▄█ ▒ ▓██  █▒░▒███   ▓██  ▀█ ██▒
-▓██▄██▓ ▒██   ██░▒██▀▀█▄    ▒██ █░░▒▓█  ▄ ▓██▒  ▐▌██▒
- ▓███▒  ░ ████▓▒░░██▓ ▒██▒   ▒▀█░  ░▒████▒▒██░   ▓██░
- ▒▓▒▒░  ░ ▒░▒░▒░ ░ ▒▓ ░▒▓░   ░ ▐░  ░░ ▒░ ░░ ▒░   ▒ ▒
- ▒ ░▒░    ░ ▒ ▒░   ░▒ ░ ▒░   ░ ░░   ░ ░  ░░ ░░   ░ ▒░
- ░ ░ ░  ░ ░ ░ ▒    ░░   ░      ░░     ░      ░   ░ ░
- ░   ░      ░ ░     ░           ░     ░  ░         ░</div>
+<nav>
+  <div class="wrap">
+    <div class="links">
+      <a href="#opera">Featured</a>
+      <a href="#index">Index</a>
+    </div>
+    <a class="logo" href="#">HJORVEN<small>OFFICINA</small></a>
+    <div class="right">
+      <div class="links" style="margin-right:18px"><a href="#disciplinae">Craft</a><a href="#quaestiones">FAQ</a></div>
+      <a class="btn" href="https://github.com/hjorven">GitHub</a>
+    </div>
+  </div>
+</nav>
 
-    <!-- Personal info. Yes, it's all true. No, I won't tell you my password. -->
-    <div class="info">
-      <span class="info-key">user</span>    <span class="info-arrow">→</span> <span class="info-val">jorven</span>
-      <span class="info-key">country</span> <span class="info-arrow">→</span> <span class="info-val">Germany</span>
-      <span class="info-key">langs</span>   <span class="info-arrow">→</span> <span class="info-val">DE / EN</span>
-      <span class="info-key">role</span>    <span class="info-arrow">→</span> <span class="info-val">Student / hobbyist dev</span>
-      <span class="info-key">editor</span>  <span class="info-arrow">→</span> <span class="info-val">VS Code</span>
-      <span class="info-key">profile</span> <span class="info-arrow">→</span> <span class="info-val"><a href="https://discord.com/users/744934661368709200" target="_blank" rel="noopener noreferrer">discord</a></span>
+<main class="wrap">
+
+  <header class="hero">
+    <div>
+      <div class="kicker">Portfolio &middot; github.com/hjorven</div>
+      <h1 style="margin-top:14px">Games,<br>apps and<br><em>clocks</em></h1>
+      <p class="lead">I build browser games, websites and apps for iPhone and Android. Here is a selection of my work, with links to try it out and the commands to build it yourself.</p>
+      <div class="actions">
+        <a class="btn" href="#opera">See featured work</a>
+        <a class="btn ghost" href="https://hjorven.github.io/Poly-battle-web/">Play Poly Battle</a>
+      </div>
+
+      <div class="stats">
+        <div><b>VI</b><span>Projects</span></div>
+        <div><b>III</b><span>Live in the browser</span></div>
+        <div><b>IV</b><span>Languages</span></div>
+      </div>
+
+      <div class="term">
+        <div class="kicker" style="margin-bottom:8px">Run locally</div>
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-cmd="git clone https://github.com/hjorven/Poly-battle-web.git&#10;cd Poly-battle-web&#10;python3 -m http.server 8000">Poly Battle</button>
+          <button role="tab" aria-selected="false" data-cmd="git clone https://github.com/hjorven/Du-bleibst.git&#10;cd Du-bleibst&#10;python3 -m http.server 8000">Du bleibst</button>
+          <button role="tab" aria-selected="false" data-cmd="git clone https://github.com/hjorven/binaeruhr.git&#10;cd binaeruhr&#10;python3 -m http.server 8000">Binary Clock</button>
+        </div>
+        <pre><code id="cmd">git clone https://github.com/hjorven/Poly-battle-web.git
+cd Poly-battle-web
+python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></pre>
+        <div class="kicker" style="margin-top:8px">Then open http://localhost:8000 &middot; <a href="#index">Commands for every project</a></div>
+      </div>
+    </div>
+    <figure>
+      <div class="art hero-art" role="img" aria-label="Engraving: a floating icosahedron inside two rings above a fluted column, surrounded by rays" style="--m:url(img/hero.png)"></div>
+    </figure>
+  </header>
+
+  <div class="tabula" aria-label="Live preview of the binary clock">
+    <canvas class="bg" id="tabula-bg"></canvas>
+    <div class="plate">
+      <div class="head"><span>Opus vivum</span><a href="https://hjorven.github.io/binaeruhr/">Open Binary Clock &rarr;</a></div>
+      <div class="title">Horologium binarium</div>
+      <div class="clock" id="clock"></div>
+      <div class="roman" id="roman">&mdash;</div>
     </div>
   </div>
 
-  <!-- ──── Projects & Links. Inhaltlich wertvoll, I swear. ──── -->
-  <div class="sections">
-    <!-- Projects: things I built. Manche funktionieren sogar. -->
-    <div class="section">
-      <div class="section-title">── projects ──</div>
-      <ul>
-        <li>
-          <span class="arrow">→</span>
-          <span><a href="https://github.com/Death-Watcher/listening-stats-android-concept" target="_blank" rel="noopener noreferrer">listening-stats-android-concept</a></span>
-        </li>
-        <li>
-          <span class="arrow">→</span>
-          <span><a href="https://github.com/Xndr2/listening-stats" target="_blank" rel="noopener noreferrer">listening-stats</a> <span class="note">(contributor)</span></span>
-        </li>
-      </ul>
+  <section id="opera">
+    <div class="sec-head">
+      <div>
+        <div class="kicker">Opera maiora</div>
+        <h2>Featured<sup class="mark">IV</sup></h2>
+        <p>A strategy game, two apps and a clock. Anything marked live runs right in your browser.</p>
+      </div>
+      <a class="btn ghost" href="https://github.com/hjorven?tab=repositories">All repositories</a>
     </div>
-
-    <!-- Links: how to follow me. Warum auch immer. -->
-    <div class="section">
-      <div class="section-title">── links ──</div>
-      <ul>
-        <li><span class="arrow">→</span> <a href="https://github.com/hjorven" target="_blank" rel="noopener noreferrer">github</a></li>
-        <li><span class="arrow">→</span> <a href="https://discord.com/users/744934661368709200" target="_blank" rel="noopener noreferrer">discord</a></li>
-      </ul>
+    <div class="opera">
+      <article class="opus">
+        <div class="art" role="img" aria-label="Engraving: hexagon tiles with a tower, a pyramid and trees" style="--m:url(img/hex.png)"></div>
+        <div class="body">
+          <div class="kicker">Opus I &middot; Strategy &middot; JavaScript</div>
+          <h3>Poly Battle</h3>
+          <p>Turn-based conquest on a world of hexagons, in low-poly 3D. 12 tribes, 27 units, 45 technologies and AI opponents with their own personality.</p>
+          <div class="foot"><span class="status live">Live</span><span class="links2"><a class="btn ghost" href="https://github.com/hjorven/Poly-battle-web">Code</a><a class="btn" href="https://hjorven.github.io/Poly-battle-web/">Play</a></span></div>
+        </div>
+      </article>
+      <article class="opus">
+        <div class="art" role="img" aria-label="Engraving: three server racks with cables" style="--m:url(img/rack.png)"></div>
+        <div class="body">
+          <div class="kicker">Opus II &middot; iPhone &middot; Swift</div>
+          <h3>Satisfactory Server App</h3>
+          <p>Native SwiftUI iPhone app for your own Satisfactory dedicated server: overview, power monitoring and controls. Finds the server on your Wi-Fi automatically.</p>
+          <div class="foot"><span class="status">Repository</span><span class="links2"><a class="btn ghost" href="https://github.com/hjorven/Satisfactory-Server-App">Code</a></span></div>
+        </div>
+      </article>
+      <article class="opus">
+        <div class="art" role="img" aria-label="Engraving: a torus with a sphere in its centre, like a record" style="--m:url(img/torus.png)"></div>
+        <div class="body">
+          <div class="kicker">Opus III &middot; Android &middot; Kotlin</div>
+          <h3>Listening Stats</h3>
+          <p>Android app for listening stats from Last.fm, stats.fm and Deezer: top lists, activity by hour and weekday, calendar heatmap.</p>
+          <div class="foot"><span class="status">Repository</span><span class="links2"><a class="btn ghost" href="https://github.com/hjorven/listening-stats-android-concept">Code</a></span></div>
+        </div>
+      </article>
+      <article class="opus">
+        <div class="art" role="img" aria-label="Engraving: an armillary sphere" style="--m:url(img/armillary.png)"></div>
+        <div class="body">
+          <div class="kicker">Opus IV &middot; Web &middot; HTML</div>
+          <h3>Binary Clock</h3>
+          <p>The time in ones and zeros, with date, Roman numerals and several display styles. It is running live at the top of this page.</p>
+          <div class="foot"><span class="status live">Live</span><span class="links2"><a class="btn ghost" href="https://github.com/hjorven/binaeruhr">Code</a><a class="btn" href="https://hjorven.github.io/binaeruhr/">Open</a></span></div>
+        </div>
+      </article>
     </div>
-  </div>
+  </section>
 
-  <!-- ──── Prompt. Looks like a terminal. It's not. Pretends to be. ──── -->
-  <div class="prompt-line">
-    <span class="user">jorven</span><span class="at">@</span><span class="host">dev</span>:<span class="path">~</span>$ <span class="cursor" aria-hidden="true"></span>
-  </div>
+  <section id="index">
+    <div class="sec-head">
+      <div>
+        <div class="kicker">Index operum</div>
+        <h2>Index<sup class="mark">VI</sup></h2>
+        <p>Every project. Tap a row to see its install commands.</p>
+      </div>
+    </div>
+    <div class="filters" role="group" aria-label="Filter by type">
+      <button aria-pressed="true" data-f="alle">All</button>
+      <button aria-pressed="false" data-f="spiel">Games</button>
+      <button aria-pressed="false" data-f="web">Web</button>
+      <button aria-pressed="false" data-f="app">Apps</button>
+      <button aria-pressed="false" data-f="mod">Mods</button>
+    </div>
+    <ol class="werke">
+      <li data-k="spiel">
+        <details>
+          <summary><span class="n">I</span><div><b>Poly Battle</b><p>Turn-based hex strategy in low-poly 3D</p></div><span class="lang">JavaScript</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <div class="inst">
+            <div class="kicker">Installation</div>
+            <pre><code>git clone https://github.com/hjorven/Poly-battle-web.git
+cd Poly-battle-web
+npm run serve</code><button class="copy" type="button">COPY</button></pre>
+            <p>Then open http://localhost:8080. AI games, hotseat and the campaign run without a server; online matches use Supabase.</p>
+            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/Poly-battle-web">Repository</a><a class="btn" href="https://hjorven.github.io/Poly-battle-web/">Open live</a></div>
+          </div>
+        </details>
+      </li>
+      <li data-k="web">
+        <details>
+          <summary><span class="n">II</span><div><b>Binary Clock</b><p>Time in ones and zeros, with date and options</p></div><span class="lang">HTML</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <div class="inst">
+            <div class="kicker">Installation</div>
+            <pre><code>git clone https://github.com/hjorven/binaeruhr.git
+cd binaeruhr
+python3 -m http.server 8000</code><button class="copy" type="button">COPY</button></pre>
+            <p>Then open http://localhost:8000. Or just double-click index.html.</p>
+            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/binaeruhr">Repository</a><a class="btn" href="https://hjorven.github.io/binaeruhr/">Open live</a></div>
+          </div>
+        </details>
+      </li>
+      <li data-k="web">
+        <details>
+          <summary><span class="n">III</span><div><b>Du bleibst</b><p>Full-screen scrolling text for iPad and desktop</p></div><span class="lang">HTML</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <div class="inst">
+            <div class="kicker">Installation</div>
+            <pre><code>git clone https://github.com/hjorven/Du-bleibst.git
+cd Du-bleibst
+python3 -m http.server 8000</code><button class="copy" type="button">COPY</button></pre>
+            <p>Then open http://localhost:8000. Tap the screen to go full screen. On an iPad you can add the page to your home screen.</p>
+            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/Du-bleibst">Repository</a><a class="btn" href="https://hjorven.github.io/Du-bleibst/">Open live</a></div>
+          </div>
+        </details>
+      </li>
+      <li data-k="app">
+        <details>
+          <summary><span class="n">IV</span><div><b>Satisfactory Server App</b><p>SwiftUI iPhone app: power monitoring and controls for your own server</p></div><span class="lang">Swift</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <div class="inst">
+            <div class="kicker">SideStore source</div>
+            <pre><code>https://raw.githubusercontent.com/hjorven/Satisfactory-Server-App/main/apps.json</code><button class="copy" type="button">COPY</button></pre>
+            <p>Without a Mac: set up SideStore with a free Apple ID, add this address under Sources and install the app “Satisfactory”. With a Mac: brew install xcodegen, then xcodegen generate.</p>
+            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/Satisfactory-Server-App">Repository</a></div>
+          </div>
+        </details>
+      </li>
+      <li data-k="app">
+        <details>
+          <summary><span class="n">V</span><div><b>Listening Stats</b><p>Android app for listening stats from Last.fm and stats.fm</p></div><span class="lang">Kotlin</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <div class="inst">
+            <div class="kicker">Installation</div>
+            <pre><code>git clone https://github.com/hjorven/listening-stats-android-concept.git
+cd listening-stats-android-concept
+export JAVA_HOME=/path/to/jdk17
+export ANDROID_HOME=/path/to/android-sdk
+./gradlew assembleDebug</code><button class="copy" type="button">COPY</button></pre>
+            <p>Adjust both paths to your system. The APK ends up in app/build/outputs/apk/debug/app-debug.apk. Requires a Last.fm API key.</p>
+            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/listening-stats-android-concept">Repository</a></div>
+          </div>
+        </details>
+      </li>
+      <li data-k="mod">
+        <details>
+          <summary><span class="n">VI</span><div><b>Satis-FPV</b><p>FPV mod for Satisfactory, early stage</p></div><span class="lang">—</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <div class="inst">
+            <div class="kicker">Installation</div>
+            <pre><code>git clone https://github.com/hjorven/Satis-FPV.git</code><button class="copy" type="button">COPY</button></pre>
+            <p>No runnable code in the repository yet, just the project idea so far.</p>
+            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/Satis-FPV">Repository</a></div>
+          </div>
+        </details>
+      </li>
+    </ol>
+  </section>
+
+  <section id="disciplinae">
+    <div class="sec-head">
+      <div>
+        <div class="kicker">Disciplinae</div>
+        <h2>What I build<sup class="mark">IV</sup></h2>
+      </div>
+    </div>
+    <div class="principia">
+      <div class="princ">
+        <div class="kicker">I &middot; Browser games</div>
+        <h3>Play without installing</h3>
+        <p>Low-poly 3D strategy against the AI, in hotseat or online. Runs on GitHub Pages, right in a browser tab.</p>
+        <div class="pic"><div class="art" role="img" aria-label="Engraving: a cube, a dodecahedron and a sphere" style="--m:url(img/dice.png)"></div></div>
+      </div>
+      <div class="princ">
+        <div class="kicker">II &middot; Websites</div>
+        <h3>Small sites, one idea each</h3>
+        <p>A binary clock and a full-screen text ticker: static, fast and framework-free.</p>
+        <div class="pic"><div class="art" role="img" aria-label="Engraving: a columned temple" style="--m:url(img/temple.png)"></div></div>
+      </div>
+      <div class="princ">
+        <div class="kicker">III &middot; Apps</div>
+        <h3>iPhone and Android</h3>
+        <p>SwiftUI built on GitHub Actions and installed via SideStore, Kotlin with Jetpack Compose.</p>
+        <div class="pic"><div class="art" role="img" aria-label="Engraving: an aqueduct" style="--m:url(img/arch.png)"></div></div>
+      </div>
+      <div class="princ">
+        <div class="kicker">IV &middot; Mods</div>
+        <h3>Extending games</h3>
+        <p>An FPV mod for Satisfactory is on the workbench.</p>
+        <div class="pic"><canvas data-noise="0.5"></canvas><span class="num">IV</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quaestiones">
+    <div class="sec-head">
+      <div><h2>Quaestiones<sup class="mark">?</sup></h2></div>
+      <a class="btn ghost" href="https://github.com/hjorven">Profile on GitHub</a>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>Can I try the projects right away?</summary>
+        <p>Poly Battle, the Binary Clock and Du bleibst run on GitHub Pages. Open the link and you are in, no account and no install.</p>
+      </details>
+      <details>
+        <summary>Does Poly Battle work on phones and iPads?</summary>
+        <p>Yes, it runs on PC, tablet and phone. After your first visit a service worker lets it work offline too.</p>
+      </details>
+      <details>
+        <summary>How do I install the iPhone app without a Mac?</summary>
+        <p>Through SideStore with a free Apple ID. The source address is listed in the index under Satisfactory Server App.</p>
+      </details>
+      <details>
+        <summary>How are the engravings on this page made?</summary>
+        <p>The objects are raymarched in Python, then reduced to two colours with Bayer or Floyd–Steinberg dithering. The hero image uses a line screen, like a copperplate engraving.</p>
+      </details>
+      <details>
+        <summary>Can I report bugs or contribute?</summary>
+        <p>Yes, please, through the issues of each repository. Poly Battle has its own issue templates and a contributing guide.</p>
+      </details>
+    </div>
+  </section>
 
 </main>
-<!-- The end. Yes, that's it. What did you expect?! -->
+
+<footer>
+  <div class="giant" aria-hidden="true">HJORVEN</div>
+  <div class="wrap row">
+    <span>Officina Hjorven &middot; MMXXVI</span>
+    <span><a href="https://github.com/hjorven">GitHub</a> &nbsp;&middot;&nbsp; <a href="#">Back to top</a></span>
+  </div>
+</footer>
+
+<div class="switch" role="group" aria-label="Appearance">
+  <button class="mode" id="mode" type="button" aria-label="Switch between light and dark"><span class="orb" aria-hidden="true"></span><span id="mode-lbl">Dark</span></button>
+  <div class="swatches" id="swatches" role="radiogroup" aria-label="Accent colour">
+    <button class="swatch" type="button" role="radio" data-a="cobalt" style="--c:#2424ff" aria-label="Cobalt"></button>
+    <button class="swatch" type="button" role="radio" data-a="violet" style="--c:#7a2cff" aria-label="Violet"></button>
+    <button class="swatch" type="button" role="radio" data-a="purple" style="--c:#b02be3" aria-label="Purple"></button>
+    <button class="swatch" type="button" role="radio" data-a="magenta" style="--c:#ff2e93" aria-label="Magenta"></button>
+    <button class="swatch" type="button" role="radio" data-a="crimson" style="--c:#d6143c" aria-label="Crimson"></button>
+    <button class="swatch" type="button" role="radio" data-a="vermilion" style="--c:#ee3a17" aria-label="Vermilion"></button>
+    <button class="swatch" type="button" role="radio" data-a="orange" style="--c:#ff7a00" aria-label="Orange"></button>
+    <button class="swatch" type="button" role="radio" data-a="gold" style="--c:#f2b200" aria-label="Gold"></button>
+    <button class="swatch" type="button" role="radio" data-a="lime" style="--c:#9bd400" aria-label="Lime"></button>
+    <button class="swatch" type="button" role="radio" data-a="green" style="--c:#1fb043" aria-label="Green"></button>
+    <button class="swatch" type="button" role="radio" data-a="patina" style="--c:#10b08b" aria-label="Patina"></button>
+    <button class="swatch" type="button" role="radio" data-a="turquoise" style="--c:#00a8dc" aria-label="Turquoise"></button>
+  </div>
+  <span class="hint" aria-hidden="true">&#8596;</span>
+</div>
+
+<script>
+  /* Befehls-Tabs mit Kopierknopf */
+  const cmd = document.getElementById('cmd');
+  document.querySelectorAll('.term .tabs button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.term .tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+    cmd.textContent = b.dataset.cmd;
+  }));
+  document.querySelectorAll('.copy').forEach(btn => btn.addEventListener('click', e => {
+    e.preventDefault();
+    const code = btn.parentElement.querySelector('code').textContent;
+    navigator.clipboard?.writeText(code).then(() => {
+      btn.textContent = 'COPIED'; setTimeout(() => btn.textContent = 'COPY', 1400);
+    });
+  }));
+
+  /* Verzeichnis filtern */
+  document.querySelectorAll('.filters button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.filters button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    document.querySelectorAll('.werke li').forEach(li => li.hidden = b.dataset.f !== 'alle' && li.dataset.k !== b.dataset.f);
+  }));
+
+  /* 1-Bit-Rauschflächen: Bayer-Raster über einem Verlauf mit etwas Körnung */
+  const B = [0,48,12,60,3,51,15,63,32,16,44,28,35,19,47,31,8,56,4,52,11,59,7,55,40,24,36,20,43,27,39,23,2,50,14,62,1,49,13,61,34,18,46,30,33,17,45,29,10,58,6,54,9,57,5,53,42,26,38,22,41,25,37,21];
+  function dither(cv, level, fg, bg, mode) {
+    const r = cv.getBoundingClientRect();
+    const s = 2; // ein Rasterpunkt = 2 CSS-Pixel
+    const W = Math.max(1, Math.round(r.width / s)), H = Math.max(1, Math.round(r.height / s));
+    cv.width = W; cv.height = H;
+    const ctx = cv.getContext('2d'), img = ctx.createImageData(W, H), d = img.data;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      let v;
+      if (mode === 'rays') {
+        const dx = x - W / 2, dy = y - H * 0.45, a = Math.atan2(dy, dx), rr = Math.hypot(dx, dy) / Math.max(W, H);
+        v = 0.08 + 0.5 * Math.max(0, 1 - rr * 2.2) + 0.08 * Math.sin(a * 24);
+      } else {
+        v = level + 0.25 * (y / H - 0.5) + 0.15 * Math.sin(x / W * 6 + y / H * 3);
+      }
+      v += (Math.random() - 0.5) * 0.18;
+      const on = v > (B[(y & 7) * 8 + (x & 7)] + 0.5) / 64;
+      const c = on ? fg : bg, i = (y * W + x) * 4;
+      d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+  /* Farben aus den CSS-Variablen lesen, damit die Raster dem Thema folgen */
+  const probe = document.createElement('i'); probe.style.display = 'none'; document.body.appendChild(probe);
+  function cssColor(name) {
+    probe.style.color = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return getComputedStyle(probe).color.match(/[\d.]+/g).slice(0, 3).map(Number);
+  }
+  const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+  function paint() {
+    const acc = cssColor('--accent'), ink = cssColor('--ink'), ink2 = cssColor('--ink-2');
+    document.querySelectorAll('canvas[data-noise]').forEach(c => dither(c, +c.dataset.noise, acc, ink2));
+    dither(document.getElementById('tabula-bg'), 0, mix(ink2, acc, 0.35), ink2, 'rays');
+  }
+  paint();
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(paint, 200); });
+
+  /* Thema und Akzentfarbe umschalten, mit Welle vom Schalter aus */
+  const root = document.documentElement;
+  const modeBtn = document.getElementById('mode'), modeLbl = document.getElementById('mode-lbl');
+  const swatches = [...document.querySelectorAll('.swatch')];
+  function syncUI() {
+    modeLbl.textContent = root.dataset.theme === 'light' ? 'Light' : 'Dark';
+    modeBtn.setAttribute('aria-pressed', root.dataset.theme === 'light');
+    swatches.forEach(b => { b.setAttribute('aria-checked', b.dataset.a === root.dataset.accent); b.tabIndex = b.dataset.a === root.dataset.accent ? 0 : -1; });
+  }
+  function save() { try { localStorage.setItem('theme', root.dataset.theme); localStorage.setItem('accent', root.dataset.accent); } catch (e) {} }
+
+  function wave(fromEl, apply) {
+    const done = () => { apply(); paint(); syncUI(); save(); };
+    if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) { done(); return; }
+    const r = fromEl.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) * 1.15;
+    const vt = document.startViewTransition(done);
+    vt.ready.then(() => {
+      const frames = [], N = 60, P = 120;
+      for (let i = 0; i <= N; i++) {
+        const t = i / N, e = 1 - Math.pow(1 - t, 3);
+        const rad = e * R, amp = Math.min(46, 10 + rad * 0.1) * (1 - t) ;
+        const pts = [];
+        for (let k = 0; k < P; k++) {
+          const a = k / P * Math.PI * 2;
+          const rr = Math.max(0, rad + amp * Math.sin(a * 9 + t * 14) + amp * 0.5 * Math.sin(a * 4 - t * 9));
+          pts.push((x + rr * Math.cos(a)).toFixed(1) + 'px ' + (y + rr * Math.sin(a)).toFixed(1) + 'px');
+        }
+        frames.push({ clipPath: 'polygon(' + pts.join(',') + ')' });
+      }
+      root.animate(frames, { duration: 1100, easing: 'linear', pseudoElement: '::view-transition-new(root)' });
+    }).catch(() => {});
+  }
+
+  modeBtn.addEventListener('click', () => wave(modeBtn.querySelector('.orb'), () => { root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light'; }));
+  swatches.forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.a === root.dataset.accent) return;
+    wave(b, () => { root.dataset.accent = b.dataset.a; });
+  }));
+  /* Pfeiltasten in der Farbleiste, Mausrad scrollt sie seitwärts */
+  document.getElementById('swatches').addEventListener('keydown', e => {
+    const i = swatches.findIndex(b => b.dataset.a === root.dataset.accent);
+    const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+    if (!d) return; e.preventDefault();
+    const n = swatches[(i + d + swatches.length) % swatches.length]; n.focus(); n.click(); n.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  });
+  document.getElementById('swatches').addEventListener('wheel', e => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { e.currentTarget.scrollLeft += e.deltaY; e.preventDefault(); }
+  }, { passive: false });
+  syncUI();
+  swatches.find(b => b.dataset.a === root.dataset.accent)?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+
+  /* Live-Binäruhr */
+  const clock = document.getElementById('clock'), roman = document.getElementById('roman'), cols = [];
+  [['HORA', 2, 4], ['MINUTA', 3, 4], ['SECUNDA', 3, 4]].forEach(([name, ...group]) => {
+    const g = document.createElement('div'); g.className = 'grp';
+    const c = document.createElement('div'); c.className = 'cols';
+    group.forEach(bits => {
+      const col = document.createElement('div'); col.className = 'col'; const leds = [];
+      for (let i = 0; i < 4; i++) { const l = document.createElement('div'); l.className = 'bit' + (i >= bits ? ' off' : ''); leds.push(l); col.appendChild(l); }
+      c.appendChild(col); cols.push(leds);
+    });
+    const s = document.createElement('span'); s.textContent = name;
+    g.append(c, s); clock.appendChild(g);
+  });
+  function toRoman(n) {
+    if (n === 0) return 'N';
+    let s = ''; for (const [v, r] of [[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]) while (n >= v) { s += r; n -= v; }
+    return s;
+  }
+  function tick() {
+    const t = new Date(), p = n => String(n).padStart(2, '0');
+    [...(p(t.getHours()) + p(t.getMinutes()) + p(t.getSeconds()))].forEach((ch, i) => cols[i].forEach((l, b) => l.classList.toggle('on', (ch >> b) & 1)));
+    roman.textContent = [t.getHours(), t.getMinutes(), t.getSeconds()].map(toRoman).join(' · ');
+    setTimeout(tick, 1000 - t.getMilliseconds());
+  }
+  tick();
+</script>
 </body>
 </html>
