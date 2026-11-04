@@ -1,8 +1,8 @@
-# Portfolio
+# hjorven.github.io
 
 Personal portfolio of [hjorven](https://github.com/hjorven) in a 1-bit dither / techno-classicism style.
 
-Live: https://hjorven.github.io/jorven.github.io/ (or https://hjorven.github.io/ once the repository is renamed to `hjorven.github.io`)
+Live: https://hjorven.github.io/
 
 ## Features
 
@@ -14,8 +14,8 @@ Live: https://hjorven.github.io/jorven.github.io/ (or https://hjorven.github.io/
 ## Run locally
 
 ```bash
-git clone https://github.com/hjorven/jorven.github.io.git
-cd jorven.github.io
+git clone https://github.com/hjorven/hjorven.github.io.git
+cd hjorven.github.io
 python3 -m http.server 8000
 ```
 
