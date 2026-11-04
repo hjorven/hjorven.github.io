@@ -99,19 +99,10 @@
     -webkit-mask: var(--m) 0 0 / 100% 100% no-repeat; mask: var(--m) 0 0 / 100% 100% no-repeat; }
   .layer.ico::after { -webkit-mask-size: 2400% 100%; mask-size: 2400% 100%;
     -webkit-mask-position: calc(var(--f, 0) * 100% / 23) 0; mask-position: calc(var(--f, 0) * 100% / 23) 0; }
-
-  /* Dither-Lupe: unter Maus oder Finger kippen die Rasterpunkte in eine Kontrastfarbe */
-  @property --lr { syntax: "<length>"; inherits: true; initial-value: 0px; }
-  .art, .layer { --lr: 0px; transition: --lr .25s ease-out; }
-  .art.lens, .layer.lens { --lr: 64px; }
-  .art::before, .layer::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: var(--lens-c, var(--paper));
-    -webkit-mask: var(--m) center / 240px 240px no-repeat, radial-gradient(circle var(--lr) at var(--mx, -999px) var(--my, -999px), #000 97%, transparent 100%);
-    mask: var(--m) center / 240px 240px no-repeat, radial-gradient(circle var(--lr) at var(--mx, -999px) var(--my, -999px), #000 97%, transparent 100%);
-    -webkit-mask-composite: source-in; mask-composite: intersect; }
-  .layer::before { --lens-c: var(--accent); -webkit-mask-position: 0 0, 0 0; mask-position: 0 0, 0 0; -webkit-mask-size: 100% 100%, auto; mask-size: 100% 100%, auto; }
-  .layer.ico::before { -webkit-mask-size: 2400% 100%, auto; mask-size: 2400% 100%, auto;
-    -webkit-mask-position: calc(var(--f, 0) * 100% / 23) 0, 0 0; mask-position: calc(var(--f, 0) * 100% / 23) 0, 0 0; }
-  @media (max-width: 560px) { .opus .art::before { -webkit-mask-size: 480px 480px, auto; mask-size: 480px 480px, auto; } }
+  /* Unterlage in Hintergrundfarbe: verdeckt die Strahlen genau hinter dem aktuellen Bild */
+  .layer.ico::before { content: ""; position: absolute; inset: 0; background: var(--ink);
+    -webkit-mask: url(img/hero-ico-knock.png) 0 0 / 2400% 100% no-repeat; mask: url(img/hero-ico-knock.png) 0 0 / 2400% 100% no-repeat;
+    -webkit-mask-position: calc(var(--f, 0) * 100% / 23) 0; mask-position: calc(var(--f, 0) * 100% / 23) 0; }
 
   /* Entwickeln beim Reinscrollen: ein Schleier aus Rasterpunkten löst sich auf */
   .veil { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; image-rendering: pixelated; pointer-events: none; }
@@ -172,11 +163,8 @@
 
   /* Navigation */
   nav { border-bottom: 1px solid var(--line); }
-  nav .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 72px; }
-  nav .links { display: flex; gap: 28px; }
-  nav .links a { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; text-decoration: none; color: var(--muted); }
-  nav .links a:hover { color: var(--paper); }
-  .logo { font-family: var(--serif); font-size: 24px; line-height: .85; text-align: center; text-decoration: none; letter-spacing: .02em; }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; height: 64px; }
+  .logo { font-family: var(--serif); font-size: 24px; line-height: .85; text-align: left; text-decoration: none; letter-spacing: .02em; }
   .logo small { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .3em; color: var(--muted); margin-top: 4px; }
   nav .right { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
 
@@ -299,11 +287,9 @@
   .inst-links { display: flex; gap: 6px; }
 
   @media (max-width: 860px) {
-    nav .wrap { grid-template-columns: 1fr auto; }
-    nav .links { display: none; }
     .logo { text-align: left; }
     .hero { grid-template-columns: 1fr; padding-top: 36px; }
-    .hero figure { order: -1; max-width: 420px; margin-inline: auto; }
+    .hero figure { order: -1; width: 100%; max-width: 420px; margin-inline: auto; }
     .opera { grid-template-columns: 1fr; }
     .werke summary { grid-template-columns: 40px 1fr auto; }
     .werke .lang { display: none; }
@@ -331,15 +317,8 @@
 
 <nav>
   <div class="wrap">
-    <div class="links">
-      <a href="#opera">Featured</a>
-      <a href="#index">Index</a>
-    </div>
     <a class="logo" href="#">HJORVEN<small>OFFICINA</small></a>
-    <div class="right">
-      <div class="links" style="margin-right:18px"><a href="#disciplinae">Craft</a><a href="#quaestiones">FAQ</a></div>
-      <a class="btn" href="https://github.com/hjorven">GitHub</a>
-    </div>
+    <div class="right"><a class="btn ghost" href="https://github.com/hjorven">GitHub</a></div>
   </div>
 </nav>
 
@@ -453,7 +432,7 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
       <button aria-pressed="false" data-f="spiel">Games</button>
       <button aria-pressed="false" data-f="web">Web</button>
       <button aria-pressed="false" data-f="app">Apps</button>
-      <button aria-pressed="false" data-f="mod">Mods</button>
+      <button aria-pressed="false" data-f="tool">Tools</button>
     </div>
     <ol class="werke">
       <li data-k="spiel">
@@ -521,14 +500,16 @@ export ANDROID_HOME=/path/to/android-sdk
           </div>
         </details>
       </li>
-      <li data-k="mod">
+      <li data-k="tool">
         <details>
-          <summary><span class="n">VI</span><div><b>Satis-FPV</b><p>FPV mod for Satisfactory, early stage</p></div><span class="lang">—</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <summary><span class="n">VI</span><div><b>Dither Workshop</b><p>1-bit dither and ASCII art editor in the browser: convert images, paint by hand, export PNG, SVG or text</p></div><span class="lang">JavaScript</span><span class="more" aria-hidden="true">Commands</span></summary>
           <div class="inst">
-            <div class="kicker">Installation</div>
-            <pre><code>git clone https://github.com/hjorven/Satis-FPV.git</code><button class="copy" type="button">COPY</button></pre>
-            <p>No runnable code in the repository yet, just the project idea so far.</p>
-            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/Satis-FPV">Repository</a></div>
+            <div class="kicker">Run locally</div>
+            <pre><code>git clone https://github.com/hjorven/dither-werkstatt.git
+cd dither-werkstatt
+python3 -m http.server 8000</code><button class="copy" type="button">COPY</button></pre>
+            <p>Then open http://localhost:8000. Or use it directly in the browser, nothing to install.</p>
+            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/dither-werkstatt">Repository</a><a class="btn" href="https://hjorven.github.io/dither-werkstatt/">Open</a></div>
           </div>
         </details>
       </li>
@@ -562,9 +543,9 @@ export ANDROID_HOME=/path/to/android-sdk
         <div class="pic"><div class="art" role="img" aria-label="Engraving: an aqueduct" style="--m:url(img/arch.png)"></div></div>
       </div>
       <div class="princ">
-        <div class="kicker">IV &middot; Mods</div>
-        <h3>Extending games</h3>
-        <p>An FPV mod for Satisfactory is on the workbench.</p>
+        <div class="kicker">IV &middot; Tools</div>
+        <h3>Workshop for the look</h3>
+        <p>A browser editor that turns images into 1-bit dither and ASCII art, the same style as this page.</p>
         <div class="pic"><canvas data-noise="0.5"></canvas><span class="num">IV</span></div>
       </div>
     </div>
@@ -605,7 +586,7 @@ export ANDROID_HOME=/path/to/android-sdk
   <div class="giant" aria-hidden="true">HJORVEN</div>
   <div class="wrap row">
     <span>Officina Hjorven &middot; MMXXVI</span>
-    <span><a href="https://github.com/hjorven">GitHub</a> &nbsp;&middot;&nbsp; <a href="#">Back to top</a></span>
+    <span><a href="wallpapers/">Wallpapers</a> &nbsp;&middot;&nbsp; <a href="https://github.com/hjorven">GitHub</a> &nbsp;&middot;&nbsp; <a href="#">Back to top</a></span>
   </div>
 </footer>
 
@@ -811,27 +792,6 @@ export ANDROID_HOME=/path/to/android-sdk
     requestAnimationFrame(heroTick);
   }
   if (!calm) requestAnimationFrame(heroTick);
-
-  /* 5) Dither-Lupe */
-  const lensTargets = [...document.querySelectorAll('.art, .layer')];
-  let lensOn = null;
-  function lensMove(e) {
-    const x = e.clientX, y = e.clientY;
-    lensTargets.forEach(el => {
-      const r = el.getBoundingClientRect();
-      const near = x > r.left - 70 && x < r.right + 70 && y > r.top - 70 && y < r.bottom + 70;
-      if (near) {
-        el.style.setProperty('--mx', (x - r.left) + 'px'); el.style.setProperty('--my', (y - r.top) + 'px');
-        el.classList.add('lens');
-      } else el.classList.remove('lens');
-    });
-  }
-  function lensOff() { lensTargets.forEach(el => el.classList.remove('lens')); }
-  addEventListener('pointermove', lensMove, { passive: true });
-  addEventListener('pointerdown', lensMove, { passive: true });
-  addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') setTimeout(lensOff, 500); }, { passive: true });
-  document.addEventListener('pointerleave', lensOff);
-  addEventListener('scroll', () => { if (matchMedia('(hover: none)').matches) lensOff(); }, { passive: true });
 
   /* 6) Tipp-Welle: Ring aus Rasterpunkten vom Tippunkt aus */
   const rc = document.getElementById('ripples'), rctx = rc.getContext('2d');
