@@ -146,6 +146,30 @@ def scene_easel(p):
     cube = sd_box(rot_y(T(p, 0.85, -1.45, 0.65), 0.6), np.array([0.2, 0.2, 0.2])) - 0.02
     return np.minimum.reduce([legs, ledge, frame, panel, ball, cube])
 
+def scene_frames(p):
+    # Wallpapers: drei Bildtafeln im Fächer auf einer Leiste, vor der mittleren ein Ringplanet
+    d = 1e9
+    for x, z, a, y in ((-1.05, -0.45, 0.65, -0.05), (0.0, 0.0, 0.0, 0.1), (1.05, -0.45, -0.65, -0.05)):
+        q = rot_y(T(p, x, y, z), a)
+        outer = sd_box(q, np.array([0.46, 0.66, 0.035]))
+        inner = sd_box(T(q, 0, 0, 0.06), np.array([0.38, 0.58, 0.05]))
+        d = np.minimum(d, np.maximum(outer, -inner))
+    ledge = sd_box(T(p, 0, -0.68, -0.1), np.array([1.7, 0.04, 0.35]))
+    planet = sd_sphere(T(p, 0.0, 0.18, 0.35), 0.24)
+    ring = sd_torus(rot_z(rot_x(T(p, 0.0, 0.18, 0.35), 1.3), 0.35), 0.4, 0.02)
+    return np.minimum.reduce([d, ledge, planet, ring])
+
+def scene_pixels(p):
+    # Dither-Werkstatt: über einem gestuften Feld aus Würfeln (Pixeln) schwebt eine Kugel
+    s = 0.28
+    cx = np.clip(np.round(p[..., 0] / s), -4, 4); cz = np.clip(np.round(p[..., 2] / s), -4, 4)
+    h = 0.05 + 0.12 * np.round(2.5 * np.exp(-((cx + 1) ** 2 + (cz + 0.5) ** 2) / 6.0))
+    q = np.stack([p[..., 0] - cx * s, p[..., 1] + 0.75 - h, p[..., 2] - cz * s], -1)
+    qa = np.abs(q) - np.stack([np.full_like(h, 0.11), h, np.full_like(h, 0.11)], -1)
+    cubes = (length(np.maximum(qa, 0)) + np.minimum(np.max(qa, -1), 0)) * 0.6
+    ball = sd_sphere(T(p, -0.28, 0.25, -0.14), 0.42)
+    return np.minimum(cubes, ball)
+
 def sd_hex(p, r, h):
     x = np.abs(p[..., 0]); z = np.abs(p[..., 2])
     d0 = np.maximum(x * 0.8660254 + z * 0.5, z) - r
@@ -370,4 +394,6 @@ if __name__ == "__main__":
     if "rack" in which: make_card("rack", scene_rack, (2.4, 1.0, 5.2), target=(0, 0.05, 0), fov=0.9, light=(-0.6, 0.8, 0.7), seed=7)
     if "torus" in which: make_card("torus", scene_torus, (0, 0.4, 4.6), fov=0.95, method="floyd", seed=4)
     if "easel" in which: make_card("easel", scene_easel, (1.3, 0.5, 4.0), target=(0.1, -0.45, 0), fov=0.95, light=(-0.6, 0.8, 0.6), seed=8)
+    if "frames" in which: make_card("frames", scene_frames, (0.5, 0.7, 4.1), target=(0, -0.1, 0), fov=0.95, light=(-0.6, 0.8, 0.7), seed=9)
+    if "pixels" in which: make_card("pixels", scene_pixels, (1.4, 1.6, 2.9), target=(0, -0.3, 0), fov=0.95, light=(-0.5, 0.9, 0.5), seed=10)
     if "arch" in which: make_card("arch", scene_arch, (2.4, 0.4, 6.0), target=(0, 0.1, 0), fov=0.85, light=(-0.5, 0.7, 0.8), seed=5)
