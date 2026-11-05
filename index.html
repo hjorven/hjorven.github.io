@@ -337,9 +337,9 @@
       </div>
 
       <div class="stats">
-        <div><b>VI</b><span>Projects</span></div>
-        <div><b>IV</b><span>Live in the browser</span></div>
-        <div><b>IV</b><span>Languages</span></div>
+        <div><b>VII</b><span>Projects</span></div>
+        <div><b>V</b><span>Live in the browser</span></div>
+        <div><b>V</b><span>Languages</span></div>
       </div>
 
       <div class="term">
@@ -377,7 +377,7 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
       <div>
         <div class="kicker">Opera maiora</div>
         <h2>Featured<sup class="mark">IV</sup></h2>
-        <p>A strategy game, two apps and a clock. Anything marked live runs right in your browser.</p>
+        <p>A strategy game, two browser tools and an iPhone app. Anything marked live runs right in your browser.</p>
       </div>
       <a class="btn ghost" href="https://github.com/hjorven?tab=repositories">All repositories</a>
     </div>
@@ -392,30 +392,30 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
         </div>
       </article>
       <article class="opus">
+        <div class="art" role="img" aria-label="Engraving: three picture frames on a shelf, a ringed planet in front of the middle one" style="--m:url(img/frames.png)"></div>
+        <div class="body">
+          <div class="kicker">Opus II &middot; Collection &middot; Python</div>
+          <h3>Wallpapers</h3>
+          <p>A growing collection of engraved and generated iPad wallpapers: 22 themes and 222 images, filterable by theme and colour, each in landscape and portrait with a ZIP per theme.</p>
+          <div class="foot"><span class="status live">Live</span><span class="links2"><a class="btn ghost" href="https://github.com/hjorven/wallpapers">Code</a><a class="btn" href="https://hjorven.github.io/wallpapers/">Open</a></span></div>
+        </div>
+      </article>
+      <article class="opus">
+        <div class="art" role="img" aria-label="Engraving: a sphere floating over a stepped field of cubes, like pixels" style="--m:url(img/pixels.png)"></div>
+        <div class="body">
+          <div class="kicker">Opus III &middot; Tool &middot; JavaScript</div>
+          <h3>Dither Workshop</h3>
+          <p>1-bit dither and ASCII art editor in the browser: turn any image into dots, blocks, Braille or characters, paint by hand and export PNG, SVG or text.</p>
+          <div class="foot"><span class="status live">Live</span><span class="links2"><a class="btn ghost" href="https://github.com/hjorven/dither-werkstatt">Code</a><a class="btn" href="https://hjorven.github.io/dither-werkstatt/">Open</a></span></div>
+        </div>
+      </article>
+      <article class="opus">
         <div class="art" role="img" aria-label="Engraving: three server racks with cables" style="--m:url(img/rack.png)"></div>
         <div class="body">
-          <div class="kicker">Opus II &middot; iPhone &middot; Swift</div>
+          <div class="kicker">Opus IV &middot; iPhone &middot; Swift</div>
           <h3>Satisfactory Server App</h3>
           <p>Native SwiftUI iPhone app for your own Satisfactory dedicated server: overview, power monitoring and controls. Finds the server on your Wi-Fi automatically.</p>
           <div class="foot"><span class="status">Repository</span><span class="links2"><a class="btn ghost" href="https://github.com/hjorven/Satisfactory-Server-App">Code</a></span></div>
-        </div>
-      </article>
-      <article class="opus">
-        <div class="art" role="img" aria-label="Engraving: a torus with a sphere in its centre, like a record" style="--m:url(img/torus.png)"></div>
-        <div class="body">
-          <div class="kicker">Opus III &middot; Android &middot; Kotlin</div>
-          <h3>Listening Stats</h3>
-          <p>Android app for listening stats from Last.fm, stats.fm and Deezer: top lists, activity by hour and weekday, calendar heatmap.</p>
-          <div class="foot"><span class="status">Repository</span><span class="links2"><a class="btn ghost" href="https://github.com/hjorven/listening-stats-android-concept">Code</a></span></div>
-        </div>
-      </article>
-      <article class="opus">
-        <div class="art" role="img" aria-label="Engraving: an armillary sphere" style="--m:url(img/armillary.png)"></div>
-        <div class="body">
-          <div class="kicker">Opus IV &middot; Web &middot; HTML</div>
-          <h3>Binary Clock</h3>
-          <p>The time in ones and zeros, with date, Roman numerals and several display styles. It is running live at the top of this page.</p>
-          <div class="foot"><span class="status live">Live</span><span class="links2"><a class="btn ghost" href="https://github.com/hjorven/binaeruhr">Code</a><a class="btn" href="https://hjorven.github.io/binaeruhr/">Open</a></span></div>
         </div>
       </article>
     </div>
@@ -425,7 +425,7 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
     <div class="sec-head">
       <div>
         <div class="kicker">Index operum</div>
-        <h2>Index<sup class="mark">VI</sup></h2>
+        <h2>Index<sup class="mark">VII</sup></h2>
         <p>Every project. Tap a row to see its install commands.</p>
       </div>
     </div>
@@ -515,6 +515,19 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
           </div>
         </details>
       </li>
+      <li data-k="web">
+        <details>
+          <summary><span class="n">VII</span><div><b>Wallpapers</b><p>Engraved and generated iPad wallpapers in 22 themes, with filters and ZIP downloads</p></div><span class="lang">Python</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <div class="inst">
+            <div class="kicker">Run locally</div>
+            <pre><code>git clone https://github.com/hjorven/wallpapers.git
+cd wallpapers
+python3 -m http.server 8000</code><button class="copy" type="button">COPY</button></pre>
+            <p>Then open http://localhost:8000. To render a theme yourself: pip install numpy pillow, then python3 tools/gen/run.py terrazzo.</p>
+            <div class="inst-links"><a class="btn ghost" href="https://github.com/hjorven/wallpapers">Repository</a><a class="btn" href="https://hjorven.github.io/wallpapers/">Open live</a></div>
+          </div>
+        </details>
+      </li>
     </ol>
   </section>
 
@@ -535,7 +548,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
       <div class="princ">
         <div class="kicker">II &middot; Websites</div>
         <h3>Small sites, one idea each</h3>
-        <p>A binary clock and a full-screen text ticker: static, fast and framework-free.</p>
+        <p>A binary clock, a full-screen text ticker and a wallpaper gallery: static, fast and framework-free.</p>
         <div class="pic"><div class="art" role="img" aria-label="Engraving: a columned temple" style="--m:url(img/temple.png)"></div></div>
       </div>
       <div class="princ">
