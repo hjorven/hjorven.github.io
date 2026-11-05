@@ -10,9 +10,13 @@ Live: https://hjorven.github.io/
 - Live binary clock
 - Light and dark theme plus 12 accent colours; every switch spreads across the page as a wave (View Transitions API)
 - Animations: engravings develop dot by dot as they scroll into view, the hero icosahedron turns (24 pre-rendered frames) with scroll parallax, and taps send out a dithered ripple. All of it is off when the system asks for reduced motion.
-- Wallpapers: 24 iPad Safari start-page backgrounds in all 12 colours at [/wallpapers/](https://hjorven.github.io/wallpapers/)
+- Wallpapers: 24 iPad Safari start-page backgrounds in all 12 colours at [/wallpapers/](https://hjorven.github.io/wallpapers/), kept in their own repository (see below)
 - Favicon, home-screen icons, web manifest and a link preview image (`og.png`)
 - No build step, no frameworks, no trackers. Fonts are self-hosted.
+
+## Wallpapers
+
+The wallpapers live in their own repository now: [hjorven/wallpapers](https://github.com/hjorven/wallpapers), served at https://hjorven.github.io/wallpapers/. GitHub Pages serves that project site under the same path, so the old link keeps working.
 
 ## Run locally
 
