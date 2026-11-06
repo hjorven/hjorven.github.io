@@ -42,3 +42,7 @@ python3 tools/hero_knock.py           # backing for the icosahedron sprite, from
 ## Fonts
 
 Instrument Serif, IBM Plex Mono and Inter Tight, all under the SIL Open Font License, bundled from Fontsource.
+
+## License
+
+The code, images and scripts are under the MIT License (`LICENSE`). The fonts are under the SIL Open Font License; their copyright notices and the license text are in `fonts/LICENSE`.

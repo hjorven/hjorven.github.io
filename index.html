@@ -1,9 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hjorven Portfolio</title>
+<title>Hjorven · Games, apps and clocks</title>
 <meta name="description" content="Portfolio of hjorven: browser games, websites and apps, with install commands for every project.">
 <link rel="canonical" href="https://hjorven.github.io/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -118,7 +118,11 @@
     padding: 6px; background: var(--ink); border: 1px solid var(--line); box-shadow: 4px 4px 0 var(--accent); }
   .mode { all: unset; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 6px 10px 6px 6px; border-right: 1px solid var(--line);
     font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--paper); }
-  .mode:focus-visible, .swatch:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* Sichtbarer Fokus für alles, was per Tastatur erreichbar ist (all: unset entfernt sonst den Rahmen) */
+  .mode:focus-visible, .swatch:focus-visible, .btn:focus-visible, .copy:focus-visible,
+  .filters button:focus-visible, .term .tabs button:focus-visible,
+  .faq summary:focus-visible, .werke summary:focus-visible, nav .right a:focus-visible,
+  .plate .head a:focus-visible, .term a:focus-visible, footer .row a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .orb { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--paper); position: relative; overflow: hidden; }
   .orb::after { content: ""; position: absolute; inset: 0 0 0 50%;
     background: radial-gradient(var(--paper) 0.8px, transparent 1px) 0 0 / 3px 3px; transition: inset .4s; }
@@ -136,7 +140,11 @@
   ::view-transition-new(root) { z-index: 2; }
 
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+  /* Sprunglink: unsichtbar, bis er per Tab den Fokus bekommt */
+  .skip { position: absolute; left: 16px; top: -100px; z-index: 60; padding: 9px 14px; background: var(--accent); color: var(--on-accent);
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; }
+  .skip:focus { top: 12px; outline: 2px solid var(--paper); outline-offset: 2px; }
   body {
     margin: 0; background: var(--ink); color: var(--paper);
     font-family: var(--sans); font-size: 15px; line-height: 1.55;
@@ -169,6 +177,9 @@
   .logo { font-family: var(--serif); font-size: 24px; line-height: .85; text-align: left; text-decoration: none; letter-spacing: .02em; }
   .logo small { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .3em; color: var(--muted); margin-top: 4px; }
   nav .right { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+  nav .right a:not(.btn) { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--muted); padding: 9px 6px; }
+  nav .right a:not(.btn):hover { color: var(--paper); }
+  @media (max-width: 560px) { nav .right a:not(.btn) { display: none; } }
 
   /* Hero */
   .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 24px; align-items: center; padding: 56px 0 24px; }
@@ -179,7 +190,7 @@
   .term { margin-top: 34px; max-width: 520px; }
   .term .tabs { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--accent); border-bottom: 0; }
   .term .tabs button { all: unset; cursor: pointer; text-align: center; padding: 7px 0; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-  .term .tabs button[aria-selected="true"] { background: var(--accent); color: var(--on-accent); }
+  .term .tabs button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
   .term pre {
     margin: 0; border: 1px solid var(--accent); background: var(--code-bg); padding: 12px 14px;
     font-family: var(--mono); font-size: 12px; line-height: 1.7; overflow-x: auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
@@ -272,14 +283,16 @@
   .werke { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--paper); }
   .werke li { border-bottom: 1px solid var(--line); }
   .werke li[hidden] { display: none; }
-  .werke summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 56px 1fr 120px 90px; gap: 16px; align-items: center; padding: 16px 0; }
+  /* summary darf nur Phrasing-Inhalt und Überschriften enthalten, darum h3 + span statt div/p; das Grid ordnet sie per Bereichen */
+  .werke summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 56px 1fr 120px 90px;
+    grid-template-areas: "n t lang more" "n d lang more"; gap: 2px 16px; align-items: center; padding: 16px 0; }
   .werke summary::-webkit-details-marker { display: none; }
-  .werke summary:hover b { color: var(--accent-soft); }
-  .werke .n { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--muted); }
-  .werke b { font-family: var(--serif); font-weight: 400; font-size: 26px; line-height: 1.1; }
-  .werke summary p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
-  .werke .lang { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--muted); }
-  .werke .more { justify-self: end; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-text); }
+  .werke summary:hover h3 { color: var(--accent-soft); }
+  .werke .n { grid-area: n; font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--muted); }
+  .werke h3 { grid-area: t; align-self: end; font-size: 26px; line-height: 1.1; }
+  .werke .desc { grid-area: d; align-self: start; color: var(--muted); font-size: 14px; }
+  .werke .lang { grid-area: lang; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--muted); }
+  .werke .more { grid-area: more; justify-self: end; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-text); }
   .werke .more::after { content: " +"; }
   .werke details[open] .more::after { content: " \2212"; }
   .inst { margin: 0 0 22px 72px; max-width: 760px; }
@@ -293,7 +306,7 @@
     .hero { grid-template-columns: 1fr; padding-top: 36px; }
     .hero figure { order: -1; width: 100%; max-width: 420px; margin-inline: auto; }
     .opera { grid-template-columns: 1fr; }
-    .werke summary { grid-template-columns: 40px 1fr auto; }
+    .werke summary { grid-template-columns: 40px 1fr auto; grid-template-areas: "n t more" "n d more"; }
     .werke .lang { display: none; }
     .inst { margin-left: 0; }
     .principia { grid-template-columns: 1fr 1fr; gap: 44px 18px; }
@@ -305,9 +318,9 @@
     .faq summary { font-size: 21px; }
     .opus { flex-direction: column; }
     .opus .art { width: 100%; aspect-ratio: 1; min-height: 0; }
-    .werke summary { grid-template-columns: 34px 1fr; }
-    .werke .more { grid-column: 2; justify-self: start; }
-    .werke b { font-size: 23px; }
+    .werke summary { grid-template-columns: 34px 1fr; grid-template-areas: "n t" "n d" ". more"; }
+    .werke .more { justify-self: start; }
+    .werke h3 { font-size: 23px; }
     .stats { gap: 18px; }
     .term pre, .inst pre { flex-direction: column-reverse; gap: 6px; }
     .term pre .copy, .inst pre .copy { align-self: flex-end; }
@@ -317,14 +330,21 @@
 </head>
 <body>
 
-<nav>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav aria-label="Main">
   <div class="wrap">
     <a class="logo" href="#">HJORVEN<small>OFFICINA</small></a>
-    <div class="right"><a class="btn ghost" href="https://github.com/hjorven">GitHub</a></div>
+    <div class="right">
+      <a href="#opera">Featured</a>
+      <a href="#index">Index</a>
+      <a href="#quaestiones">FAQ</a>
+      <a class="btn ghost" href="https://github.com/hjorven">GitHub</a>
+    </div>
   </div>
 </nav>
 
-<main class="wrap">
+<main class="wrap" id="main">
 
   <header class="hero">
     <div>
@@ -344,14 +364,14 @@
 
       <div class="term">
         <div class="kicker" style="margin-bottom:8px">Run locally</div>
-        <div class="tabs" role="tablist">
-          <button role="tab" aria-selected="true" data-cmd="git clone https://github.com/hjorven/Poly-battle-web.git&#10;cd Poly-battle-web&#10;python3 -m http.server 8000">Poly Battle</button>
-          <button role="tab" aria-selected="false" data-cmd="git clone https://github.com/hjorven/Du-bleibst.git&#10;cd Du-bleibst&#10;python3 -m http.server 8000">Du bleibst</button>
-          <button role="tab" aria-selected="false" data-cmd="git clone https://github.com/hjorven/binaeruhr.git&#10;cd binaeruhr&#10;python3 -m http.server 8000">Binary Clock</button>
+        <div class="tabs" role="group" aria-label="Choose a project">
+          <button type="button" aria-pressed="true" data-cmd="git clone https://github.com/hjorven/Poly-battle-web.git&#10;cd Poly-battle-web&#10;python3 -m http.server 8000">Poly Battle</button>
+          <button type="button" aria-pressed="false" data-cmd="git clone https://github.com/hjorven/Du-bleibst.git&#10;cd Du-bleibst&#10;python3 -m http.server 8000">Du bleibst</button>
+          <button type="button" aria-pressed="false" data-cmd="git clone https://github.com/hjorven/binaeruhr.git&#10;cd binaeruhr&#10;python3 -m http.server 8000">Binary Clock</button>
         </div>
         <pre><code id="cmd">git clone https://github.com/hjorven/Poly-battle-web.git
 cd Poly-battle-web
-python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></pre>
+python3 -m http.server 8000</code><button class="copy" id="copy" type="button">COPY</button></pre>
         <div class="kicker" style="margin-top:8px">Then open http://localhost:8000 &middot; <a href="#index">Commands for every project</a></div>
       </div>
     </div>
@@ -362,10 +382,10 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
     </figure>
   </header>
 
-  <div class="tabula" aria-label="Live preview of the binary clock">
+  <div class="tabula" role="region" aria-label="Live preview of the binary clock">
     <canvas class="bg" id="tabula-bg"></canvas>
     <div class="plate">
-      <div class="head"><span>Opus vivum</span><a href="https://hjorven.github.io/binaeruhr/">Open Binary Clock &rarr;</a></div>
+      <div class="head"><span>Opus vivum &middot; Live binary clock</span><a href="https://hjorven.github.io/binaeruhr/">Open Binary Clock &rarr;</a></div>
       <div class="title">Horologium binarium</div>
       <div class="clock" id="clock"></div>
       <div class="roman" id="roman">&mdash;</div>
@@ -377,7 +397,7 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
       <div>
         <div class="kicker">Opera maiora</div>
         <h2>Featured<sup class="mark">IV</sup></h2>
-        <p>A strategy game, two browser tools and an iPhone app. Anything marked live runs right in your browser.</p>
+        <p>A strategy game, a wallpaper collection, a browser tool and an iPhone app. Anything marked live runs right in your browser; the numbers match the index below.</p>
       </div>
       <a class="btn ghost" href="https://github.com/hjorven?tab=repositories">All repositories</a>
     </div>
@@ -394,7 +414,7 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
       <article class="opus">
         <div class="art" role="img" aria-label="Engraving: three picture frames on a shelf, a ringed planet in front of the middle one" style="--m:url(img/frames.png)"></div>
         <div class="body">
-          <div class="kicker">Opus II &middot; Collection &middot; Python</div>
+          <div class="kicker">Opus VII &middot; Collection &middot; Python</div>
           <h3>Wallpapers</h3>
           <p>A growing collection of engraved and generated iPad wallpapers: 22 themes and 222 images, filterable by theme and colour, each in landscape and portrait with a ZIP per theme.</p>
           <div class="foot"><span class="status live">Live</span><span class="links2"><a class="btn ghost" href="https://github.com/hjorven/wallpapers">Code</a><a class="btn" href="https://hjorven.github.io/wallpapers/">Open</a></span></div>
@@ -403,7 +423,7 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
       <article class="opus">
         <div class="art" role="img" aria-label="Engraving: a sphere floating over a stepped field of cubes, like pixels" style="--m:url(img/pixels.png)"></div>
         <div class="body">
-          <div class="kicker">Opus III &middot; Tool &middot; JavaScript</div>
+          <div class="kicker">Opus VI &middot; Tool &middot; JavaScript</div>
           <h3>Dither Workshop</h3>
           <p>1-bit dither and ASCII art editor in the browser: turn any image into dots, blocks, Braille or characters, paint by hand and export PNG, SVG or text.</p>
           <div class="foot"><span class="status live">Live</span><span class="links2"><a class="btn ghost" href="https://github.com/hjorven/dither-werkstatt">Code</a><a class="btn" href="https://hjorven.github.io/dither-werkstatt/">Open</a></span></div>
@@ -430,16 +450,16 @@ python3 -m http.server 8000</code><button class="copy" id="copy">COPY</button></
       </div>
     </div>
     <div class="filters" role="group" aria-label="Filter by type">
-      <button aria-pressed="true" data-f="alle">All</button>
-      <button aria-pressed="false" data-f="spiel">Games</button>
-      <button aria-pressed="false" data-f="web">Web</button>
-      <button aria-pressed="false" data-f="app">Apps</button>
-      <button aria-pressed="false" data-f="tool">Tools</button>
+      <button type="button" aria-pressed="true" data-f="alle">All</button>
+      <button type="button" aria-pressed="false" data-f="spiel">Games</button>
+      <button type="button" aria-pressed="false" data-f="web">Web</button>
+      <button type="button" aria-pressed="false" data-f="app">Apps</button>
+      <button type="button" aria-pressed="false" data-f="tool">Tools</button>
     </div>
     <ol class="werke">
       <li data-k="spiel">
         <details>
-          <summary><span class="n">I</span><div><b>Poly Battle</b><p>Turn-based hex strategy in low-poly 3D</p></div><span class="lang">JavaScript</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <summary><span class="n">I</span><h3>Poly Battle</h3><span class="desc">Turn-based hex strategy in low-poly 3D</span><span class="lang">JavaScript</span><span class="more" aria-hidden="true">Commands</span></summary>
           <div class="inst">
             <div class="kicker">Installation</div>
             <pre><code>git clone https://github.com/hjorven/Poly-battle-web.git
@@ -452,7 +472,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
       </li>
       <li data-k="web">
         <details>
-          <summary><span class="n">II</span><div><b>Binary Clock</b><p>Time in ones and zeros, with date and options</p></div><span class="lang">HTML</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <summary><span class="n">II</span><h3>Binary Clock</h3><span class="desc">Time in ones and zeros, with date and options</span><span class="lang">HTML</span><span class="more" aria-hidden="true">Commands</span></summary>
           <div class="inst">
             <div class="kicker">Installation</div>
             <pre><code>git clone https://github.com/hjorven/binaeruhr.git
@@ -465,7 +485,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
       </li>
       <li data-k="web">
         <details>
-          <summary><span class="n">III</span><div><b>Du bleibst</b><p>Full-screen scrolling text for iPad and desktop</p></div><span class="lang">HTML</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <summary><span class="n">III</span><h3>Du bleibst</h3><span class="desc">Full-screen scrolling text for iPad and desktop</span><span class="lang">HTML</span><span class="more" aria-hidden="true">Commands</span></summary>
           <div class="inst">
             <div class="kicker">Installation</div>
             <pre><code>git clone https://github.com/hjorven/Du-bleibst.git
@@ -478,7 +498,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
       </li>
       <li data-k="app">
         <details>
-          <summary><span class="n">IV</span><div><b>Satisfactory Server App</b><p>SwiftUI iPhone app: power monitoring and controls for your own server</p></div><span class="lang">Swift</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <summary><span class="n">IV</span><h3>Satisfactory Server App</h3><span class="desc">SwiftUI iPhone app: power monitoring and controls for your own server</span><span class="lang">Swift</span><span class="more" aria-hidden="true">Commands</span></summary>
           <div class="inst">
             <div class="kicker">SideStore source</div>
             <pre><code>https://raw.githubusercontent.com/hjorven/Satisfactory-Server-App/main/apps.json</code><button class="copy" type="button">COPY</button></pre>
@@ -489,7 +509,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
       </li>
       <li data-k="app">
         <details>
-          <summary><span class="n">V</span><div><b>Listening Stats</b><p>Android app for listening stats from Last.fm and stats.fm</p></div><span class="lang">Kotlin</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <summary><span class="n">V</span><h3>Listening Stats</h3><span class="desc">Android app for listening stats from Last.fm and stats.fm</span><span class="lang">Kotlin</span><span class="more" aria-hidden="true">Commands</span></summary>
           <div class="inst">
             <div class="kicker">Installation</div>
             <pre><code>git clone https://github.com/hjorven/listening-stats-android-concept.git
@@ -504,7 +524,7 @@ export ANDROID_HOME=/path/to/android-sdk
       </li>
       <li data-k="tool">
         <details>
-          <summary><span class="n">VI</span><div><b>Dither Workshop</b><p>1-bit dither and ASCII art editor in the browser: convert images, paint by hand, export PNG, SVG or text</p></div><span class="lang">JavaScript</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <summary><span class="n">VI</span><h3>Dither Workshop</h3><span class="desc">1-bit dither and ASCII art editor in the browser: convert images, paint by hand, export PNG, SVG or text</span><span class="lang">JavaScript</span><span class="more" aria-hidden="true">Commands</span></summary>
           <div class="inst">
             <div class="kicker">Run locally</div>
             <pre><code>git clone https://github.com/hjorven/dither-werkstatt.git
@@ -517,7 +537,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
       </li>
       <li data-k="web">
         <details>
-          <summary><span class="n">VII</span><div><b>Wallpapers</b><p>Engraved and generated iPad wallpapers in 22 themes, with filters and ZIP downloads</p></div><span class="lang">Python</span><span class="more" aria-hidden="true">Commands</span></summary>
+          <summary><span class="n">VII</span><h3>Wallpapers</h3><span class="desc">Engraved and generated iPad wallpapers in 22 themes, with filters and ZIP downloads</span><span class="lang">Python</span><span class="more" aria-hidden="true">Commands</span></summary>
           <div class="inst">
             <div class="kicker">Run locally</div>
             <pre><code>git clone https://github.com/hjorven/wallpapers.git
@@ -630,7 +650,7 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
   /* Befehls-Tabs mit Kopierknopf */
   const cmd = document.getElementById('cmd');
   document.querySelectorAll('.term .tabs button').forEach(b => b.addEventListener('click', () => {
-    document.querySelectorAll('.term .tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+    document.querySelectorAll('.term .tabs button').forEach(x => x.setAttribute('aria-pressed', x === b));
     cmd.textContent = b.dataset.cmd;
   }));
   document.querySelectorAll('.copy').forEach(btn => btn.addEventListener('click', e => {
@@ -787,20 +807,23 @@ python3 -m http.server 8000</code><button class="copy" type="button">COPY</butto
   /* 2) + 9) Titelbild: Ikosaeder dreht sich (24 Bilder), Parallaxe und kürzer werdende Strahlen beim Scrollen */
   const fig = document.getElementById('hero-fig');
   const Lr = fig.querySelector('.rays'), Lc = fig.querySelector('.column'), Li = fig.querySelector('.ico');
-  let heroVisible = true;
-  new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; }).observe(fig);
+  /* Der Loop läuft nur, solange das Titelbild im Blick und der Tab sichtbar ist; sonst wird er angehalten */
+  let heroVisible = true, heroRaf = 0;
   function heroTick(now) {
-    if (heroVisible && !document.hidden) {
-      const y = Math.min(scrollY, 900);
-      const f = Math.floor(now / 120) % 24;
-      Li.style.setProperty('--f', f);
-      Li.style.transform = `translateY(${-y * 0.14}px)`;
-      Lc.style.transform = `translateY(${y * 0.06}px)`;
-      Lr.style.transform = `translateY(${y * 0.25}px) rotate(${Math.sin(now / 4000) * 3 + y * 0.02}deg) scale(${1 - Math.min(y / 700, 1) * 0.35})`;
-    }
-    requestAnimationFrame(heroTick);
+    heroRaf = 0;
+    if (!heroVisible || document.hidden) return;
+    const y = Math.min(scrollY, 900);
+    const f = Math.floor(now / 120) % 24;
+    Li.style.setProperty('--f', f);
+    Li.style.transform = `translateY(${-y * 0.14}px)`;
+    Lc.style.transform = `translateY(${y * 0.06}px)`;
+    Lr.style.transform = `translateY(${y * 0.25}px) rotate(${Math.sin(now / 4000) * 3 + y * 0.02}deg) scale(${1 - Math.min(y / 700, 1) * 0.35})`;
+    heroRaf = requestAnimationFrame(heroTick);
   }
-  if (!calm) requestAnimationFrame(heroTick);
+  function heroStart() { if (!calm && !heroRaf && heroVisible && !document.hidden) heroRaf = requestAnimationFrame(heroTick); }
+  new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; heroStart(); }).observe(fig);
+  document.addEventListener('visibilitychange', heroStart);
+  heroStart();
 
   /* 6) Tipp-Welle: Ring aus Rasterpunkten vom Tippunkt aus */
   const rc = document.getElementById('ripples'), rctx = rc.getContext('2d');
